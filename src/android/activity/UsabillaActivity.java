@@ -1,6 +1,6 @@
 package com.cga;
 
-import com.cga.FakeR;
+import com.cga.usabilla.FakeR;
 import android.widget.Button;
 import android.content.BroadcastReceiver;
 import android.content.Context;
