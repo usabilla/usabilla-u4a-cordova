@@ -21,6 +21,7 @@ import com.usabilla.sdk.ubform.utils.ThemeConfig;
 import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.View;
+import android.net.Uri;
 
 public class UsabillaActivity extends AppCompatActivity implements UBFormInterface {
     protected FakeR fakeR;
@@ -62,7 +63,7 @@ public class UsabillaActivity extends AppCompatActivity implements UBFormInterfa
     }
 
     private void setUpBroadcastReceivers() {
-        BroadcastReceiver mCloser;
+        BroadcastReceiver mCloser, mPlayStore;
 
         mCloser = new BroadcastReceiver() {
             @Override
@@ -72,7 +73,17 @@ public class UsabillaActivity extends AppCompatActivity implements UBFormInterfa
             }
         };
 
+        mPlayStore = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final String appPackageName = "com.beachbody.mychallengetracker";
+                UsabillaActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            }
+        };
+
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mCloser, new IntentFilter("com.usabilla.closeForm"));
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mPlayStore, new IntentFilter("com.usabilla.redirectToPlayStore"));
+
     }
 
     @Override
