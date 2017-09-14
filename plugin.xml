@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-usabilla" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+  <name>Usabilla</name>
+  <js-module name="Usabilla" src="www/Usabilla.js">
+    <clobbers target="plugins.Usabilla" />
+  </js-module>
+  <platform name="android">
+    <config-file parent="/*" target="res/xml/config.xml">
+      <feature name="Usabilla"><param name="android-package" value="com.cga.Usabilla" /></feature>
+    </config-file>
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <activity 
+          android:configChanges="orientation|screenSize" 
+          android:screenOrientation="portrait"
+          android:name="com.cga.UsabillaActivity"
+          android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+    </config-file>
+    <config-file parent="/*" target="AndroidManifest.xml">    
+    </config-file>
+    <source-file src="src/android/activity/UsabillaActivity.java" target-dir="src/com/cga"/>
+    <source-file src="src/android/Usabilla.java" target-dir="src/com/cga" />
+    <source-file src="src/android/activity/FakeR.java" target-dir="src/com/cga" />
+    <source-file src="src/android/lib/ubform-3.4.3.aar" target-dir="libs" framework="true"/>
+    <source-file src="src/android/activity/usabilla_activity.xml" target-dir="res/layout"/>
+    <framework src="com.android.support:transition:24.2.0" />
+    <framework src="com.android.support:appcompat-v7:+" />
+    <framework src="com.android.volley:volley:1.0.0" />
+    <framework src="src/android/usabilla.gradle" custom="true" type="gradleReference" />
+  </platform>
+</plugin>

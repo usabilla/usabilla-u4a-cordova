@@ -1,0 +1,17 @@
+{
+  "name": "cordova-usabilla",
+  "version": "0.1.0",
+  "description": "native implementation of Usabilla",
+  "cordova": {
+    "id": "cordova-usabilla",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "",
+  "license": "ISC"
+}
