@@ -94,8 +94,6 @@ public class UsabillaActivity extends AppCompatActivity implements UBFormInterfa
 
     @Override
     public void textForMainButtonUpdated(String text) {
-        if (item != null) {
-          item.setTitle(text);
-        }
+        submitButton.setText(text);
     }
 }
