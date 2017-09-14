@@ -20,7 +20,7 @@
     </config-file>
     <source-file src="src/android/activity/UsabillaActivity.java" target-dir="src/com/cga"/>
     <source-file src="src/android/Usabilla.java" target-dir="src/com/cga" />
-    <source-file src="src/android/activity/FakeR.java" target-dir="src/com/cga" />
+    <!-- source-file src="src/android/activity/FakeR.java" target-dir="src/com/cga" /-->
     <source-file src="src/android/lib/ubform-3.4.3.aar" target-dir="libs" framework="true"/>
     <source-file src="src/android/activity/usabilla_activity.xml" target-dir="res/layout"/>
     <framework src="com.android.support:transition:24.2.0" />
