@@ -105,6 +105,9 @@ public class UsabillaActivity extends AppCompatActivity implements UBFormInterfa
 
     @Override
     public void textForMainButtonUpdated(String text) {
-        submitButton.setText(text);
+      submitButton.setText(text);
+      if(!"submit".equals(text.toLowerCase())) {
+        cancelButton.setVisibility(View.INVISIBLE);
+      }
     }
 }
