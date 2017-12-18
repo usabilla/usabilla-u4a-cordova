@@ -22,6 +22,8 @@ import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.View;
 import android.net.Uri;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 public class UsabillaActivity extends AppCompatActivity implements UBFormInterface {
     protected FakeR fakeR;
@@ -58,7 +60,14 @@ public class UsabillaActivity extends AppCompatActivity implements UBFormInterfa
         initButtons();
         UBFormClient.initClient(getApplicationContext());
         String formId = getIntent().getStringExtra("FORM_ID");
-        UBFormClient.loadFeedbackForm(formId, getApplicationContext(), UsabillaActivity.this);
+        String email = getIntent().getStringExtra("EMAIL");
+        boolean isCoach = getIntent().getBooleanExtra("IS_COACH", false);
+        JSONObject customVars = new JSONObject();
+        try {
+            customVars.put("is_coach", isCoach);
+            customVars.put("Email", email);
+        } catch (JSONException e) {}
+        UBFormClient.loadFeedbackForm(formId, customVars, getApplicationContext(), UsabillaActivity.this);
         setUpBroadcastReceivers();
     }
 

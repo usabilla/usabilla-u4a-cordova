@@ -19,8 +19,12 @@ public class Usabilla extends CordovaPlugin {
         Log.d(TAG, action);
         if (action.equals("feedback")) {
             String formId = data.getString(0);
+            String email = data.getString(1);
+            boolean isCoach = data.getBoolean(2);
             intent = new Intent(cordova.getActivity(), UsabillaActivity.class);
             intent.putExtra("FORM_ID", formId);
+            intent.putExtra("EMAIL", email);
+            intent.putExtra("IS_COACH", isCoach);
 
             if (this.cordova != null) {
               this.cordova.startActivityForResult((CordovaPlugin) this, intent, 0);
