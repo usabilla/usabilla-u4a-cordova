@@ -4,6 +4,7 @@
   <js-module name="Usabilla" src="www/Usabilla.js">
     <clobbers target="plugins.Usabilla" />
   </js-module>
+  <dependency id="cordova-plugin-cocoapod-support"/>
   <platform name="android">
     <config-file parent="/*" target="res/xml/config.xml">
       <feature name="Usabilla"><param name="android-package" value="com.cga.Usabilla" /></feature>
@@ -27,5 +28,18 @@
     <framework src="com.android.support:appcompat-v7:+" />
     <framework src="com.android.volley:volley:1.0.0" />
     <framework src="src/android/usabilla.gradle" custom="true" type="gradleReference" />
+  </platform>
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="Usabilla">
+        <param name="ios-package" value="Usabilla" />
+      </feature>
+    </config-file>
+    <dependency id="cordova-plugin-add-swift-support" version="1.7.2">
+      <preference name="UseSwiftLanguageVersion" value="3.3" />
+    </dependency>
+    <pods-config ios-min-version="9.0" use-frameworks="true"/>
+    <source-file src="src/ios/Usabilla.swift" />
+    <pod name="Usabilla" version="4.1.2" />
   </platform>
 </plugin>
