@@ -6,25 +6,46 @@ import org.json.JSONException;
 import android.util.Log;
 import android.content.Intent;
 import com.cga.UsabillaActivity;
+import org.json.JSONObject;
+import java.util.Iterator;
 
 public class Usabilla extends CordovaPlugin {
     public static String TAG = "Usabilla";
     private CallbackContext callbackContext;
+
+    public void populateIntentValues(Intent intent, JSONArray data) {
+        for (int i = 1; i < data.length(); i++) {
+            try {
+                JSONObject jsonObj = data.getJSONObject(i);
+
+                Iterator<String> iter = jsonObj.keys();
+                while (iter.hasNext()) {
+                    String key = iter.next();
+                    try {
+                        String value = (String)jsonObj.get(key);
+                        if (Boolean.parseBoolean(value)) {
+                            intent.putExtra(key, Boolean.valueOf(value));
+                        } else {
+                            intent.putExtra(key, value);
+                        }
+
+                    } catch (JSONException e) {}
+                }
+            } catch (JSONException e) {}
+        }
+    }
+
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
         this.callbackContext = callbackContext;
         Intent intent = null;
 
-        Log.d(TAG, "testing");
-        Log.d(TAG, action);
         if (action.equals("feedback")) {
-            String formId = data.getString(0);
-            String email = data.getString(1);
-            boolean isCoach = data.getBoolean(2);
             intent = new Intent(cordova.getActivity(), UsabillaActivity.class);
+
+            this.populateIntentValues(intent, data);
+            String formId = data.getString(0);
             intent.putExtra("FORM_ID", formId);
-            intent.putExtra("EMAIL", email);
-            intent.putExtra("IS_COACH", isCoach);
 
             if (this.cordova != null) {
               this.cordova.startActivityForResult((CordovaPlugin) this, intent, 0);

@@ -52,6 +52,22 @@ public class UsabillaActivity extends AppCompatActivity implements UBFormInterfa
       });
     }
 
+    protected JSONObject getCustomVars() {
+        Bundle bundle = getIntent().getExtras();
+        JSONObject customVars = new JSONObject();
+
+        if (bundle != null) {
+            for (String key : bundle.keySet()) {
+                if (!"FORM_ID".equals(key)) {
+                    try {
+                        customVars.put(key, bundle.get(key));
+                    } catch (JSONException e) {}
+                }
+            }
+        }
+        return customVars;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         fakeR = new FakeR(this);
@@ -60,13 +76,7 @@ public class UsabillaActivity extends AppCompatActivity implements UBFormInterfa
         initButtons();
         UBFormClient.initClient(getApplicationContext());
         String formId = getIntent().getStringExtra("FORM_ID");
-        String email = getIntent().getStringExtra("EMAIL");
-        boolean isCoach = getIntent().getBooleanExtra("IS_COACH", false);
-        JSONObject customVars = new JSONObject();
-        try {
-            customVars.put("is_coach", isCoach);
-            customVars.put("Email", email);
-        } catch (JSONException e) {}
+        JSONObject customVars = getCustomVars();
         UBFormClient.loadFeedbackForm(formId, customVars, getApplicationContext(), UsabillaActivity.this);
         setUpBroadcastReceivers();
     }
