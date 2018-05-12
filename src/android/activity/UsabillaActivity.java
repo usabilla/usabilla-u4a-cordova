@@ -21,20 +21,6 @@ public class UsabillaActivity extends AppCompatActivity implements UsabillaFormC
     protected FakeR fakeR;
     public static String TAG = "UsabillaActivity";
 
-    protected HashMap<String, Object> getCustomVars() {
-        Bundle bundle = getIntent().getExtras();
-        HashMap<String, Object> customVars = new HashMap<String, Object>();
-
-        if (bundle != null) {
-            for (String key : bundle.keySet()) {
-                if (!"FORM_ID".equals(key) && !"APP_ID".equals(key)) {
-                    customVars.put(key, bundle.get(key));
-                }
-            }
-        }
-        return customVars;
-    }
-
     private void setUpBroadcastReceivers() {
         BroadcastReceiver mCloser, mPlayStore;
 
@@ -69,8 +55,6 @@ public class UsabillaActivity extends AppCompatActivity implements UsabillaFormC
 
         String formId = getIntent().getStringExtra("FORM_ID");
         final Usabilla usabilla = Usabilla.Companion.getInstance(this);
-        usabilla.initialize(this);
-        usabilla.setCustomVariables(getCustomVars());
         usabilla.loadFeedbackForm(this, formId, null, null, this);
     }
 

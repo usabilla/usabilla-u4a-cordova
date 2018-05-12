@@ -5,9 +5,10 @@
     <clobbers target="plugins.Usabilla" />
   </js-module>
   <platform name="android">
+    <dependency id="cordova-android-fragments" />
     <config-file parent="/*" target="res/xml/config.xml">
       <feature name="UsabillaCordova">
-        <param name="android-package" value="com.cga.Usabilla" />
+        <param name="android-package" value="com.cga.UsabillaCordova" />
       </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
@@ -20,8 +21,10 @@
     </config-file>
     <config-file parent="/*" target="AndroidManifest.xml">    
     </config-file>
+    <framework src="com.android.support:appcompat-v7:18.0.+"/>
+    <source-file src="src/android/activity/MainActivity.java" target-dir="src/com/cga"/>
     <source-file src="src/android/activity/UsabillaActivity.java" target-dir="src/com/cga"/>
-    <source-file src="src/android/Usabilla.java" target-dir="src/com/cga" />
+    <source-file src="src/android/UsabillaCordova.java" target-dir="src/com/cga" />
     <source-file src="src/android/activity/FakeR.java" target-dir="src/com/cga/usabilla"/>
     <source-file src="src/android/activity/usabilla_activity.xml" target-dir="res/layout"/>
     <framework src="src/android/usabilla.gradle" custom="true" type="gradleReference" />
