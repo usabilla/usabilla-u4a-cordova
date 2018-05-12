@@ -36,12 +36,12 @@ Usabilla.prototype.initApp = function(success, fail, appId, customVars) {
     ]);
 };
 
-Usabilla.prototype.resetCampaing = function(success, fail) {
+Usabilla.prototype.resetCampaign = function(success, fail) {
   return cordova.exec(
     success, 
     fail, 
     "UsabillaCordova", 
-    "resetCampaing");
+    "resetCampaign");
 };
 
 Usabilla.prototype.sendEvent = function(success, fail, eventId) {

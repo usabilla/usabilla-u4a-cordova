@@ -7,24 +7,15 @@ protocol ResultDelegate: class {
 
 class FeedbackController: UIViewController, UsabillaDelegate {
     var formId: String?
-    var appId: String?
-    var customVariables: [String : Any]?
+
     weak var delegate: ResultDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         Usabilla.delegate = self
         
-        Usabilla.initialize(
-            appID: self.appId,
-            completion: {
-                if self.customVariables != nil {
-                    Usabilla.customVariables = self.customVariables!
-                }
-                Usabilla.loadFeedbackForm(self.formId!)
-        })
+        Usabilla.loadFeedbackForm(self.formId!)
     }
-    
     
     //Called when your form succesfully load
     func formDidLoad(form: UINavigationController) {

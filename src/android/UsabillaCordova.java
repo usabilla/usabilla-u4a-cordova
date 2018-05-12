@@ -63,7 +63,7 @@ public class UsabillaCordova extends CordovaPlugin {
             HashMap<String, Object> customVars = this.parseOptions((JSONObject) data.get(0));
             this.initApp(customVars);
             return true;
-        } else if (action.equals("resetCampaing")) {
+        } else if (action.equals("resetCampaign")) {
             this.resetCampaign();
             return true;
         } else if (action.equals("sendEvent")) {
@@ -89,6 +89,7 @@ public class UsabillaCordova extends CordovaPlugin {
 
     public void sendEvent(String eventName) {
         usabilla.sendEvent(this.cordova.getActivity(), eventName);
+        this.onActivityResult(0, Activity.RESULT_OK, null);
     }
 
     public void resetCampaign() {
