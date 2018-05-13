@@ -1,4 +1,4 @@
-package com.cga;
+package com.usabilla;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,17 +9,12 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.cga.usabilla.FakeR;
 import com.usabilla.sdk.ubform.Usabilla;
 import com.usabilla.sdk.ubform.UsabillaFormCallback;
 import com.usabilla.sdk.ubform.sdk.form.FormClient;
 
-
-import java.util.HashMap;
-
 public class UsabillaActivity extends AppCompatActivity implements UsabillaFormCallback{
     protected FakeR fakeR;
-    public static String TAG = "UsabillaActivity";
 
     private void setUpBroadcastReceivers() {
         BroadcastReceiver mCloser, mPlayStore;
@@ -36,7 +31,11 @@ public class UsabillaActivity extends AppCompatActivity implements UsabillaFormC
             @Override
             public void onReceive(Context context, Intent intent) {
                 final String appPackageName = getApplicationContext().getPackageName();
-                UsabillaActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
             }
         };
 

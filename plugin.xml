@@ -8,26 +8,27 @@
     <dependency id="cordova-android-fragments" />
     <config-file parent="/*" target="res/xml/config.xml">
       <feature name="UsabillaCordova">
-        <param name="android-package" value="com.cga.UsabillaCordova" />
+        <param name="android-package" value="com.usabilla.UsabillaCordova" />
       </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
       <activity 
           android:configChanges="orientation|screenSize" 
           android:screenOrientation="portrait"
-          android:name="com.cga.UsabillaActivity"
+          android:name="com.usabilla.UsabillaActivity"
           android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
     </config-file>
     <config-file parent="/*" target="AndroidManifest.xml">    
     </config-file>
     <framework src="com.android.support:appcompat-v7:18.0.+"/>
-    <source-file src="src/android/activity/MainActivity.java" target-dir="src/com/cga"/>
-    <source-file src="src/android/activity/UsabillaActivity.java" target-dir="src/com/cga"/>
-    <source-file src="src/android/UsabillaCordova.java" target-dir="src/com/cga" />
-    <source-file src="src/android/activity/FakeR.java" target-dir="src/com/cga/usabilla"/>
+    <source-file src="src/android/activity/MainActivity.java" target-dir="src/com/usabilla"/>
+    <source-file src="src/android/activity/UsabillaActivity.java" target-dir="src/com/usabilla"/>
+    <source-file src="src/android/UsabillaCordova.java" target-dir="src/com/usabilla" />
+    <source-file src="src/android/activity/FakeR.java" target-dir="src/com/usabilla"/>
     <source-file src="src/android/activity/usabilla_activity.xml" target-dir="res/layout"/>
     <framework src="src/android/usabilla.gradle" custom="true" type="gradleReference" />
+    <hook type="after_plugin_install" src="scripts/android/afterPluginInstall.js"/>
   </platform>
   <platform name="ios">
     <config-file target="config.xml" parent="/*">

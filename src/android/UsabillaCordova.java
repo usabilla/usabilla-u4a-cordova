@@ -1,4 +1,4 @@
-package com.cga;
+package com.usabilla;
 
 import org.apache.cordova.*;
 import org.json.JSONArray;
@@ -17,10 +17,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class UsabillaCordova extends CordovaPlugin {
-    public static String TAG = "Usabilla";
     private CallbackContext callbackContext;
     private Usabilla usabilla;
-    private boolean appInit = false;
     private String formId;
     private String appId;
 
@@ -51,6 +49,7 @@ public class UsabillaCordova extends CordovaPlugin {
         this.callbackContext = callbackContext;
 
         if (action.equals("feedback")) {
+            this.parseOptions((JSONObject) data.get(0));
             Intent intent = new Intent(cordova.getActivity(), UsabillaActivity.class);
             intent.putExtra("FORM_ID", this.formId);
 
