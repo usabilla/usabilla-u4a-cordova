@@ -18,7 +18,7 @@ To install the Usabilla SDK into your Cordova App:
 1. In a terminal window, navigate to the root directory of your project and run :
 
 ```
-cordova plugin add usabilla-cordova --save
+cordova plugin add cordova-usabilla@0.1.0 --save
 ```
 
 ### Additional setup
