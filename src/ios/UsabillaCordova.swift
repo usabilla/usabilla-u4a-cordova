@@ -18,7 +18,11 @@ import Usabilla
                 } else if (key == "FORM_ID") {
                     self.formId = value as? String
                 } else {
-                    arguments[key] = value
+                    if (value is String) {
+                        arguments[key] = value as? String
+                    } else if (value is Bool) {
+                        arguments[key] = value as? Bool
+                    }                    
                 }
             }
         }
