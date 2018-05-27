@@ -1,15 +1,20 @@
 repositories{    
-  jcenter()
-  flatDir {
-      dirs 'libs'
-   }
+    jcenter()
+    maven {
+        url "https://maven.google.com"
+    }
+    flatDir {
+        dirs 'libs'
+    }
+
 }
 
+cdvBuildToolsVersion="26.0.2"
+cdvCompileSdkVersion=26
+cdvMinSdkVersion=16
+
 dependencies {
-  compile 'com.android.support:transition:24.2.0'
-  compile 'com.android.support:appcompat-v7:18.0.+'
-  compile 'com.android.volley:volley:1.0.0'
-  compile(name:'ubform-3.4.3', ext:'aar')
+    compile 'com.usabilla.sdk:ubform:5.0.+'
 }
 
 android {

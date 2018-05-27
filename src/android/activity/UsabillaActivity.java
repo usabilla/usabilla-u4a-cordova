@@ -1,75 +1,20 @@
-package com.cga;
+package com.usabilla;
 
-import com.cga.usabilla.FakeR;
-import android.widget.Button;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.Toast;
-import android.app.Activity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import com.usabilla.sdk.ubform.UBFormClient;
-import com.usabilla.sdk.ubform.UBFormInterface;
-import com.usabilla.sdk.ubform.controllers.Form;
-import com.usabilla.sdk.ubform.utils.ThemeConfig;
-import android.util.Log;
-import android.view.View.OnClickListener;
-import android.view.View;
-import android.net.Uri;
-import org.json.JSONObject;
-import org.json.JSONException;
 
-public class UsabillaActivity extends AppCompatActivity implements UBFormInterface {
+import com.usabilla.sdk.ubform.Usabilla;
+import com.usabilla.sdk.ubform.UsabillaFormCallback;
+import com.usabilla.sdk.ubform.sdk.form.FormClient;
+
+public class UsabillaActivity extends AppCompatActivity implements UsabillaFormCallback{
     protected FakeR fakeR;
-    private Form form;
-    private MenuItem item;
-    public static String TAG = "UsabillaActivity";
-    protected Button cancelButton;
-    protected Button submitButton;
-
-    protected void initButtons() {
-      cancelButton = (Button) findViewById(fakeR.getId("id", "cancelButton"));
-      cancelButton.setOnClickListener( new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          setResult(RESULT_OK, null);
-          finish();
-        }
-      });
-
-      submitButton = (Button) findViewById(fakeR.getId("id", "submitButton"));
-      submitButton.setOnClickListener( new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          form.navigationButtonPushed();
-        }
-      });
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        fakeR = new FakeR(this);
-        super.onCreate(savedInstanceState);
-        setContentView(fakeR.getId("layout", "usabilla_activity"));
-        initButtons();
-        UBFormClient.initClient(getApplicationContext());
-        String formId = getIntent().getStringExtra("FORM_ID");
-        String email = getIntent().getStringExtra("EMAIL");
-        boolean isCoach = getIntent().getBooleanExtra("IS_COACH", false);
-        JSONObject customVars = new JSONObject();
-        try {
-            customVars.put("is_coach", isCoach);
-            customVars.put("Email", email);
-        } catch (JSONException e) {}
-        UBFormClient.loadFeedbackForm(formId, customVars, getApplicationContext(), UsabillaActivity.this);
-        setUpBroadcastReceivers();
-    }
 
     private void setUpBroadcastReceivers() {
         BroadcastReceiver mCloser, mPlayStore;
@@ -85,8 +30,12 @@ public class UsabillaActivity extends AppCompatActivity implements UBFormInterfa
         mPlayStore = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                final String appPackageName = "com.beachbody.mychallengetracker";
-                UsabillaActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                final String appPackageName = getApplicationContext().getPackageName();
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
             }
         };
 
@@ -96,27 +45,23 @@ public class UsabillaActivity extends AppCompatActivity implements UBFormInterfa
     }
 
     @Override
-    public void formLoadedSuccessfully(Form form) {
-        this.form = form;
-        ThemeConfig themeConfig = form.getThemeConfig();
-        //I will use the action bar to hold the navigation button
-        form.hideDefaultNavigationButton(true);
-        form.hideCancelButton(true);
+    protected void onCreate(Bundle savedInstanceState) {
+        fakeR = new FakeR(this);
+        super.onCreate(savedInstanceState);
+        setContentView(fakeR.getId("layout", "usabilla_activity"));
 
-        getSupportFragmentManager().beginTransaction().add(fakeR.getId("id", "container"), form).commit();
+        setUpBroadcastReceivers();
+
+        String formId = getIntent().getStringExtra("FORM_ID");
+        final Usabilla usabilla = Usabilla.Companion.getInstance(this);
+        usabilla.loadFeedbackForm(this, formId, null, null, this);
     }
 
     @Override
-    public void formFailedLoading(Form form) {
-        setResult(5, null);
-        finish();
-    }
-
-    @Override
-    public void textForMainButtonUpdated(String text) {
-      submitButton.setText(text);
-      if(!"submit".equals(text.toLowerCase())) {
-        cancelButton.setVisibility(View.INVISIBLE);
-      }
+    public void formLoadSuccess(FormClient form) {
+        getSupportFragmentManager()
+            .beginTransaction()
+            .add(fakeR.getId("id", "container"), form.getFragment())
+            .commit();
     }
 }
