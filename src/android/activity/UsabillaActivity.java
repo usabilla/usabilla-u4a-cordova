@@ -64,13 +64,4 @@ public class UsabillaActivity extends AppCompatActivity implements UsabillaFormC
             .add(fakeR.getId("id", "container"), form.getFragment())
             .commit();
     }
-
-    @Override
-    public void formLoadFail() {
-        // The form did not load (internet connection, invalid formId...)
-    }
-
-    @Override
-    public void mainButtonTextUpdated(String text) {
-    }
 }
