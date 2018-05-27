@@ -24,7 +24,7 @@
     </platform>
     <preference name="UseSwiftLanguageVersion" value="3.3" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
-    <plugin name="cordova-usabilla" spec="^0.1.0" />
+    <plugin name="cordova-usabilla" spec="^2.0.0" />
     <engine name="ios" spec="^4.5.4" />
     <engine name="android" spec="^7.0.0" />
 </widget>
