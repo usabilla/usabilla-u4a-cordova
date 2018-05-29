@@ -6,6 +6,9 @@
 
 https://cordova.apache.org/docs/en/2.9.0/guide/cli/index.html
 
+`brew install node`
+tested on node 8.11. Older version might be incomptabile
+
 `sudo npm install -g cordova`
 
 # Adding Platforms
@@ -16,9 +19,11 @@ https://cordova.apache.org/docs/en/2.9.0/guide/cli/index.html
 When adding a platform on cordova it will make sure it has all the tools to build that mobile app. It will therefore download all the plugins and cache them under `plugins/` folder.
 
 # Building through the console
-
-`cordova build android`
+`cordova platform add ios`
 `cordova build ios`
+
+`cordova platform add android`
+`cordova build android`
 this will generate the apk/ipa files that can be later on released
 
 `cordova run android`
@@ -28,14 +33,14 @@ same process as above but it will fire up the application as well. The android a
 # Build through the IDEs
 
 For iOS
-
+`cordova platform add ios`
 1. Run `cordova prepare ios` to load all the necessary pods
 2. Open XCode project `hellocordova.xcodeproject` on `platforms/ios`
 3. Under frameworks folder remove the file Pods_HelloCordova.framework (when building by console this step is not necessary)
 4. Debug or Run app
 
 For Android
-
+`cordova platform add android`
 1. Run `cordova prepare android` to perform any necessary prep
 2. Open `platforms/android` folder withAndroidStudio
 3. Some version of AndroidStudio will ask you to sync the project with gradle on a popup
