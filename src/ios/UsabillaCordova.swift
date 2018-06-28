@@ -5,14 +5,15 @@ import Usabilla
     var formId: String?
     var appId: String?
     var customVariables: [String: Any]?
-    var eventId: String?
+    var eventName: String?
 
+    // Extracts the variables sent from Usabilla.js
     func extractCustomVariables(command: CDVInvokedUrlCommand) {
         var arguments: [String: Any] = [:]
         for (_, element) in command.arguments.enumerated() {
             for (key, value) in element as! Dictionary<String, Any> {
-                if (key == "EVENT_ID") {
-                    self.eventId = value as? String
+                if (key == "EVENT_NAME") {
+                    self.eventName = value as? String
                 } else if (key == "APP_ID") {
                     self.appId = value as? String
                 } else if (key == "FORM_ID") {
@@ -29,8 +30,8 @@ import Usabilla
         self.customVariables = arguments
     }
 
-    @objc(feedback:)
-    func feedback(command: CDVInvokedUrlCommand) {
+    @objc(loadFeedbackForm:)
+    func loadFeedbackForm(command: CDVInvokedUrlCommand) {
         self.command = command;
         self.extractCustomVariables(command: command)
         
@@ -45,8 +46,8 @@ import Usabilla
         )
     }
     
-    @objc(initApp:)
-    func initApp(command: CDVInvokedUrlCommand) {
+    @objc(initialize:)
+    func initialize(command: CDVInvokedUrlCommand) {
         self.command = command;
         extractCustomVariables(command: command)
         Usabilla.customVariables = self.customVariables!
@@ -62,7 +63,7 @@ import Usabilla
     func sendEvent(command: CDVInvokedUrlCommand) {
         self.command = command;
         extractCustomVariables(command: command)
-        Usabilla.sendEvent(event: self.eventId!)
+        Usabilla.sendEvent(event: self.eventName!)
         self.success(completed: true)
     }
     

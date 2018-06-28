@@ -2,20 +2,7 @@ var exec = require('cordova/exec');
 var argscheck = require('cordova/argscheck');
 var Usabilla = function() {};
 
-Usabilla.prototype.feedback = function(success, fail, formId) {
-  var vars = {};
-  vars['FORM_ID'] = formId;
-
-  return cordova.exec(
-    success, 
-    fail, 
-    "UsabillaCordova", 
-    "feedback", [
-      vars
-    ]);
-};
-
-Usabilla.prototype.initApp = function(success, fail, appId, customVars) {
+Usabilla.prototype.initialize = function(success, fail, appId, customVars) {
   var vars = {};
   var customVars = customVars || {};
   vars['APP_ID'] = appId;
@@ -31,7 +18,34 @@ Usabilla.prototype.initApp = function(success, fail, appId, customVars) {
     success, 
     fail, 
     "UsabillaCordova", 
-    "initApp", [
+    "initialize", [
+      vars
+    ]);
+};
+
+Usabilla.prototype.loadFeedbackForm = function(success, fail, formId) {
+  var vars = {};
+  vars['FORM_ID'] = formId;
+
+  return cordova.exec(
+    success, 
+    fail, 
+    "UsabillaCordova", 
+    "loadFeedbackForm", [
+      vars
+    ]);
+};
+
+Usabilla.prototype.sendEvent = function(success, fail, eventId) {
+  var vars = {};
+  var customVars = customVars || {};
+  vars['EVENT_NAME'] = eventId;
+
+  return cordova.exec(
+    success, 
+    fail, 
+    "UsabillaCordova", 
+    "sendEvent", [
       vars
     ]);
 };
@@ -42,20 +56,6 @@ Usabilla.prototype.resetCampaign = function(success, fail) {
     fail, 
     "UsabillaCordova", 
     "resetCampaign");
-};
-
-Usabilla.prototype.sendEvent = function(success, fail, eventId) {
-  var vars = {};
-  var customVars = customVars || {};
-  vars['EVENT_ID'] = eventId;
-
-  return cordova.exec(
-    success, 
-    fail, 
-    "UsabillaCordova", 
-    "sendEvent", [
-      vars
-    ]);
 };
 
 window.Usabilla = new Usabilla();
