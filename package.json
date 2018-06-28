@@ -1,11 +1,16 @@
 {
-  "name": "cordova-usabilla",
-  "version": "2.0.0",
-  "description": "native implementation of Usabilla",
+  "name": "usabilla-cordova",
+  "version": "1.0.0",
+  "description": "Usabilla SDK for Cordova",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/usabilla/usabilla-u4a-cordova.git"
+  },
   "cordova": {
-    "id": "cordova-usabilla",
+    "id": "usabilla-cordova",
     "platforms": [
-      "android"
+      "android", 
+      "ios"
     ]
   },
   "dependencies": {
@@ -13,8 +18,14 @@
   },
   "keywords": [
     "ecosystem:cordova",
-    "cordova-android"
+    "cordova-android",
+    "cordova-ios",
+    "usabilla",
+    "cordova",
+    "feedback",
+    "user-feedback",
+    "targeted-surveys",
+    "sdk"
   ],
-  "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }
