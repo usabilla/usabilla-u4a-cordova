@@ -1,6 +1,6 @@
 {
-  "name": "usabilla-cordova",
-  "version": "1.0.0",
+  "name": "@usabilla/usabilla-cordova-private-beta",
+  "version": "1.0.1",
   "description": "Usabilla SDK for Cordova",
   "repository": {
     "type": "git",
