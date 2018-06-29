@@ -84,7 +84,7 @@ var app = {
                     fromExampleApp: true,
                     foo: 'var'
                 };
-                Usabilla.feedback(
+                Usabilla.loadFeedbackForm(
                     function() {
                         self.setButtonsDisabled(false);
                     }, 
