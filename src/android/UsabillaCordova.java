@@ -62,8 +62,8 @@ public class UsabillaCordova extends CordovaPlugin {
             HashMap<String, Object> customVars = this.parseOptions((JSONObject) data.get(0));
             this.initialize(customVars);
             return true;
-        } else if (action.equals("resetCampaign")) {
-            this.resetCampaign();
+        } else if (action.equals("resetCampaignData")) {
+            this.resetCampaignData();
             return true;
         } else if (action.equals("sendEvent")) {
             JSONObject dataObj = (JSONObject) data.get(0);
@@ -91,7 +91,7 @@ public class UsabillaCordova extends CordovaPlugin {
         this.onActivityResult(0, Activity.RESULT_OK, null);
     }
 
-    public void resetCampaign() {
+    public void resetCampaignData() {
         usabilla.resetCampaignData(this.cordova.getActivity(), new UsabillaReadyCallback() {
             @Override
             public void onUsabillaInitialized() {

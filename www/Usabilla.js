@@ -36,6 +36,19 @@ Usabilla.prototype.loadFeedbackForm = function(success, fail, formId) {
     ]);
 };
 
+Usabilla.prototype.loadFeedbackFormWithCurrentViewScreenshot = function(success, fail, formId) {
+  var vars = {};
+  vars['FORM_ID'] = formId;
+  
+  return cordova.exec(
+    success,
+    fail,
+    "UsabillaCordova",
+    "loadFeedbackFormWithCurrentViewScreenshot", [
+      vars
+    ]);
+};
+
 Usabilla.prototype.sendEvent = function(success, fail, eventId) {
   var vars = {};
   var customVars = customVars || {};
@@ -50,12 +63,12 @@ Usabilla.prototype.sendEvent = function(success, fail, eventId) {
     ]);
 };
 
-Usabilla.prototype.resetCampaign = function(success, fail) {
+Usabilla.prototype.resetCampaignData = function(success, fail) {
   return cordova.exec(
     success, 
     fail, 
     "UsabillaCordova", 
-    "resetCampaign");
+    "resetCampaignData");
 };
 
 window.Usabilla = new Usabilla();

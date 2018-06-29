@@ -7,6 +7,7 @@ protocol ResultDelegate: class {
 
 class FeedbackController: UIViewController, UsabillaDelegate {
     var formId: String?
+    var screenshot: UIImage?
 
     weak var delegate: ResultDelegate?
     
@@ -14,7 +15,7 @@ class FeedbackController: UIViewController, UsabillaDelegate {
         super.viewDidLoad()
         Usabilla.delegate = self
         
-        Usabilla.loadFeedbackForm(self.formId!)
+        Usabilla.loadFeedbackForm(self.formId!, screenshot: screenshot)
     }
     
     //Called when your form succesfully load
