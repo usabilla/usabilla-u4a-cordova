@@ -1,6 +1,6 @@
 {
   "name": "@usabilla/usabilla-cordova-private-beta",
-  "version": "1.0.6",
+  "version": "0.0.0-development",
   "description": "Usabilla SDK for Cordova",
   "repository": {
     "type": "git",
@@ -9,12 +9,15 @@
   "cordova": {
     "id": "usabilla-cordova",
     "platforms": [
-      "android", 
+      "android",
       "ios"
     ]
   },
   "dependencies": {
     "xml2js": "^0.4.17"
+  },
+  "scripts": {
+    "semantic-release": "semantic-release -version - verbopse "
   },
   "keywords": [
     "ecosystem:cordova",
@@ -28,5 +31,8 @@
     "targeted-surveys",
     "sdk"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "semantic-release": "^15.6.3"
+  }
 }

@@ -17,7 +17,7 @@
     "cordova-plugin-add-swift-support": "^1.7.2",
     "cordova-plugin-cocoapod-support": "^1.3.0",
     "cordova-plugin-whitelist": "^1.3.3",
-    "usabilla-cordova": "@usabilla/usabilla-cordova-private-beta@~0.0.1"
+    "usabilla-cordova": "@usabilla/usabilla-cordova-private-beta"
   },
   "cordova": {
     "plugins": {
