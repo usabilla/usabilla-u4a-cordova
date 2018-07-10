@@ -1,0 +1,18 @@
+# Mac
+.DS_Store
+
+# Node
+npm-debug.log
+/node_modules
+
+# Cordova
+/platforms
+/plugins
+
+# res
+resources/signing
+
+#exmample
+/example/UsabillaExample/node_modules
+/example/UsabillaExample/platforms
+/example/UsabillaExample/plugins
