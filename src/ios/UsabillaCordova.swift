@@ -5,14 +5,15 @@ import Usabilla
     var formId: String?
     var appId: String?
     var customVariables: [String: Any]?
-    var eventId: String?
+    var eventName: String?
 
+    // Extracts the variables sent from Usabilla.js
     func extractCustomVariables(command: CDVInvokedUrlCommand) {
         var arguments: [String: Any] = [:]
         for (_, element) in command.arguments.enumerated() {
             for (key, value) in element as! Dictionary<String, Any> {
-                if (key == "EVENT_ID") {
-                    self.eventId = value as? String
+                if (key == "EVENT_NAME") {
+                    self.eventName = value as? String
                 } else if (key == "APP_ID") {
                     self.appId = value as? String
                 } else if (key == "FORM_ID") {
@@ -29,8 +30,22 @@ import Usabilla
         self.customVariables = arguments
     }
 
-    @objc(feedback:)
-    func feedback(command: CDVInvokedUrlCommand) {
+    // Iinitialize the SDK with your appId to target campaigns
+    @objc(initialize:)
+    func initialize(command: CDVInvokedUrlCommand) {
+        self.command = command;
+        extractCustomVariables(command: command)
+        Usabilla.customVariables = self.customVariables!
+        Usabilla.initialize(
+            appID: self.appId,
+            completion: {
+                self.success(completed: true)
+        })
+    }
+
+    // Load Usabilla passive forms with form ids
+    @objc(loadFeedbackForm:)
+    func loadFeedbackForm(command: CDVInvokedUrlCommand) {
         self.command = command;
         self.extractCustomVariables(command: command)
         
@@ -44,30 +59,40 @@ import Usabilla
             completion: nil
         )
     }
-    
-    @objc(initApp:)
-    func initApp(command: CDVInvokedUrlCommand) {
-        self.command = command;
-        extractCustomVariables(command: command)
-        Usabilla.customVariables = self.customVariables!
-        Usabilla.initialize(
-            appID: self.appId,
-            completion: {
-                self.success(completed: true)
-        })
-    }
-    
 
+    // Load Usabilla passive forms with the visibile view screenshot
+    @objc(loadFeedbackFormWithCurrentViewScreenshot:)
+    func loadFeedbackFormWithCurrentViewScreenshot(command: CDVInvokedUrlCommand) {
+        self.command = command;
+        self.extractCustomVariables(command: command)
+        
+        let feedbackController: FeedbackController = FeedbackController()
+        feedbackController.formId = self.formId
+        feedbackController.delegate = self
+        if let topController = UIApplication.topViewController() {
+            let screenshot = Usabilla.takeScreenshot(topController.view)
+            feedbackController.screenshot = screenshot
+        }
+
+        self.viewController?.present(
+            feedbackController,
+            animated: true,
+            completion: nil
+        )
+    }
+
+    // Send events to trigger campaigns
     @objc(sendEvent:)
     func sendEvent(command: CDVInvokedUrlCommand) {
         self.command = command;
         extractCustomVariables(command: command)
-        Usabilla.sendEvent(event: self.eventId!)
+        Usabilla.sendEvent(event: self.eventName!)
         self.success(completed: true)
     }
     
-    @objc(resetCampaign:)
-    func resetCampaign(command: CDVInvokedUrlCommand) {
+    // Reset campaign data to a clean state
+    @objc(resetCampaignData:)
+    func resetCampaignData(command: CDVInvokedUrlCommand) {
         self.command = command;
         Usabilla.resetCampaignData {
             self.success(completed: true)
@@ -95,5 +120,22 @@ import Usabilla
             pluginResult,
             callbackId: command?.callbackId
         )
+    }
+}
+
+extension UIApplication {
+    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let navigationController = controller as? UINavigationController {
+            return topViewController(controller: navigationController.visibleViewController)
+        }
+        if let tabController = controller as? UITabBarController {
+            if let selected = tabController.selectedViewController {
+                return topViewController(controller: selected)
+            }
+        }
+        if let presented = controller?.presentedViewController {
+            return topViewController(controller: presented)
+        }
+        return controller
     }
 }

@@ -59,7 +59,7 @@ var app = {
         var customVars = {
             type: 'premium'
         };
-        Usabilla.initApp(
+        Usabilla.initialize(
             function() {
                 self.setButtonsDisabled(false);
             },
@@ -84,7 +84,7 @@ var app = {
                     fromExampleApp: true,
                     foo: 'var'
                 };
-                Usabilla.feedback(
+                Usabilla.loadFeedbackForm(
                     function() {
                         self.setButtonsDisabled(false);
                     }, 
@@ -100,7 +100,7 @@ var app = {
         var resetEvent = document.getElementById("reset-button");
         resetEvent.onclick = function() {
             self.setButtonsDisabled(true);
-            Usabilla.resetCampaign(
+            Usabilla.resetCampaignData(
                 function() {
                     self.setButtonsDisabled(false);
                 },

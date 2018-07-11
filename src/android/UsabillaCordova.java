@@ -48,7 +48,7 @@ public class UsabillaCordova extends CordovaPlugin {
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
         this.callbackContext = callbackContext;
 
-        if (action.equals("feedback")) {
+        if (action.equals("loadFeedbackForm")) {
             this.parseOptions((JSONObject) data.get(0));
             Intent intent = new Intent(cordova.getActivity(), UsabillaActivity.class);
             intent.putExtra("FORM_ID", this.formId);
@@ -58,23 +58,23 @@ public class UsabillaCordova extends CordovaPlugin {
             }
             return true;
 
-        } else if (action.equals("initApp")) {
+        } else if (action.equals("initialize")) {
             HashMap<String, Object> customVars = this.parseOptions((JSONObject) data.get(0));
-            this.initApp(customVars);
+            this.initialize(customVars);
             return true;
-        } else if (action.equals("resetCampaign")) {
-            this.resetCampaign();
+        } else if (action.equals("resetCampaignData")) {
+            this.resetCampaignData();
             return true;
         } else if (action.equals("sendEvent")) {
             JSONObject dataObj = (JSONObject) data.get(0);
-            this.sendEvent((String)dataObj.get("EVENT_ID"));
+            this.sendEvent((String)dataObj.get("EVENT_NAME"));
             return true;
         } else {
             return false;
         }
     }
 
-    public void initApp(HashMap<String, Object> customVars) {
+    public void initialize(HashMap<String, Object> customVars) {
         usabilla = Usabilla.Companion.getInstance(cordova.getActivity());
         usabilla.initialize(this.cordova.getActivity(), this.appId, new UsabillaReadyCallback() {
             @Override
@@ -91,7 +91,7 @@ public class UsabillaCordova extends CordovaPlugin {
         this.onActivityResult(0, Activity.RESULT_OK, null);
     }
 
-    public void resetCampaign() {
+    public void resetCampaignData() {
         usabilla.resetCampaignData(this.cordova.getActivity(), new UsabillaReadyCallback() {
             @Override
             public void onUsabillaInitialized() {

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-usabilla" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="usabilla-cordova" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
   <name>UsabillaCordova</name>
   <js-module name="UsabillaCordova" src="www/Usabilla.js">
     <clobbers target="plugins.Usabilla" />
@@ -43,6 +43,6 @@
     <pods-config ios-min-version="9.0" use-frameworks="true"/>
     <source-file src="src/ios/UsabillaCordova.swift" />
     <source-file src="src/ios/FeedbackController.swift" />
-    <pod name="Usabilla" version="5.0.0" />
+    <pod name="Usabilla" version="5.0.2" />
   </platform>
 </plugin>
