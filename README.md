@@ -18,7 +18,7 @@ To install the Usabilla SDK into your Cordova App:
 1. In a terminal window, navigate to the root directory of your project and run :
 
 ```
-cordova plugin add cordova-usabilla@2.0.0 --save
+cordova plugin add usabilla-cordova --save
 ```
 
 ### Additional setup
@@ -36,14 +36,14 @@ This version will depend on which version of XCode you are using.
 
 ### Requirements
 
-This version of the react native bridge works with the latest release of `XCode 9.3`.
+This version of the react native bridge works with the latest release of `XCode 9.4`.
 
 ## Usage
 
 Prior to any usage the tool needs to be started:
 
 ```
-  Usabilla.initApp(
+  Usabilla.initialize(
     function() {
         console.log('success');
     },
@@ -57,7 +57,7 @@ Prior to any usage the tool needs to be started:
 ### Load a Passive Feedback form
 
 ```
-  Usabilla.feedback(
+  Usabilla.loadFeedbackForm(
     function() {
         console.log('success');
     }, 
@@ -71,9 +71,22 @@ This callback has a parameter containing the information:
   - formId (string)
   - isRedirectToAppStoreEnabled (boolean)
 
-This method will take a screenshot of the current visible view and pre-fill the form with it.
+### Pre-fill a Passive Feedback form with a custom screenshot
 
-In order to set custom variables in the Usabilla native library it's necessary to call the method:
+Usabilla for Cordova allows you to attach a screenshot to a form before sending it by calling:
+
+```
+  Usabilla.loadFeedbackFormWithCurrentViewScreenshot(
+    function() {
+        console.log('success');
+    }, 
+    function () {
+        console.log('error');
+    },
+    YOUR_FORM_ID_HERE);
+```
+
+This method will take a screenshot of the current visible view and pre-fill the form with it.
 
 ### Campaigns
 
@@ -89,13 +102,13 @@ This call loads and updates all your campaigns locally and you can start targeti
     function () {
         self.setButtonsDisabled(false);
     },
-    YOUR_EVENT_ID_HERE);
+    YOUR_EVENT_NAME_HERE);
 ```
 
 The Usabilla SDK allows you to reset all the campaign data by calling:
 
 ```
-  Usabilla.resetCampaign(
+  Usabilla.resetCampaignData(
     function() {
         console.log('success');
     },
