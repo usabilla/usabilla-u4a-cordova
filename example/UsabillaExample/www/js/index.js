@@ -55,7 +55,7 @@ var app = {
     initApp: function() {
         this.setButtonsDisabled(true);
         var self = this;
-        var appId = "69439731-5ed7-4abb-b5d1-974b5a4ccc1b";
+        var appId = "{YOUR_APP_ID_HERE}}";
         var customVars = {
             type: 'premium'
         };
@@ -115,7 +115,7 @@ var app = {
         var sendEvent = document.getElementById("event-button");
         sendEvent.onclick = function() {
             var eventId = document.getElementById("event-id").value;
-            var appId = "69439731-5ed7-4abb-b5d1-974b5a4ccc1b";
+            var appId = "{YOUR_APP_ID_HERE}";
             self.setButtonsDisabled(true);
             if (!eventId) {
                 alert("Input a form id to submit");
