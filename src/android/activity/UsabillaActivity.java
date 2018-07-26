@@ -19,17 +19,17 @@ import com.usabilla.sdk.ubform.sdk.form.FormClient;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import static com.usabilla.Constant.FORM_ID;
-import static com.usabilla.Constant.SCREENSHOT_NAME;
-
 public class UsabillaActivity extends AppCompatActivity implements UsabillaFormCallback {
-    protected FakeR fakeR;
+
+    private static final String FORM_ID = "FORM_ID";
+    private static final String SCREENSHOT_NAME = "screenshot";
 
     private IntentFilter closeFormFilter = new IntentFilter("com.usabilla.closeForm");
-
     private BroadcastReceiver receiverFormClosed;
     private BroadcastReceiver receiverPlaystore;
 
+    protected FakeR fakeR;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         fakeR = new FakeR(this);

@@ -18,12 +18,12 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import static com.usabilla.Constant.APP_ID;
-import static com.usabilla.Constant.EVENT_NAME;
-import static com.usabilla.Constant.FORM_ID;
-import static com.usabilla.Constant.SCREENSHOT_NAME;
-
 public class UsabillaCordova extends CordovaPlugin {
+
+    private static final String APP_ID = "APP_ID";
+    private static final String EVENT_NAME = "EVENT_NAME";
+    private static final String FORM_ID = "FORM_ID";
+    private static final String SCREENSHOT_NAME = "screenshot";
 
     private CallbackContext callbackContext;
     private String appId;
