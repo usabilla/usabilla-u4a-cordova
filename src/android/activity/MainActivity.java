@@ -12,10 +12,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
-
 import com.usabilla.sdk.ubform.Usabilla;
 import com.usabilla.sdk.ubform.sdk.entity.FeedbackResult;
-import com.webileapps.fragments.CordovaFragment;
+import uk.co.reallysmall.cordova.plugin.fragment.CordovaFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
         currentFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
