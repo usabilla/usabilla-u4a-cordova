@@ -36,7 +36,7 @@ This version will depend on which version of XCode you are using.
 
 ### Requirements
 
-This version of the react native bridge works with the latest release of `XCode 9.4`.
+This version of the Cordova bridge works with the latest release of `XCode 9.4`.
 
 ## Usage
 
