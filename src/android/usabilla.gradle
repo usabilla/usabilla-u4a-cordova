@@ -1,4 +1,4 @@
-repositories{    
+repositories {
     jcenter()
     maven {
         url "https://maven.google.com"
@@ -9,17 +9,13 @@ repositories{
 
 }
 
-cdvBuildToolsVersion="26.0.2"
-cdvCompileSdkVersion=26
-cdvMinSdkVersion=16
-
 dependencies {
     compile 'com.usabilla.sdk:ubform:5.0.+'
 }
 
 android {
-  packagingOptions {
-    exclude 'META-INF/NOTICE'
-    exclude 'META-INF/LICENSE'
-  }
+    packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
 }
