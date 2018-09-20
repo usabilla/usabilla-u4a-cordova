@@ -5,7 +5,7 @@
     <clobbers target="plugins.Usabilla" />
   </js-module>
   <platform name="android">
-    <dependency id="cordova-android-fragments" />
+    <dependency id="cordova-plugin-android-fragmentactivity" />
     <config-file parent="/*" target="res/xml/config.xml">
       <feature name="UsabillaCordova">
         <param name="android-package" value="com.usabilla.UsabillaCordova" />
