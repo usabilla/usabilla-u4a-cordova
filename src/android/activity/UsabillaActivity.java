@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.usabilla.sdk.ubform.Usabilla;
+import com.usabilla.sdk.ubform.UbConstants;
 import com.usabilla.sdk.ubform.UsabillaFormCallback;
 import com.usabilla.sdk.ubform.sdk.form.FormClient;
 
@@ -24,9 +25,8 @@ public class UsabillaActivity extends AppCompatActivity implements UsabillaFormC
     private static final String FORM_ID = "FORM_ID";
     private static final String SCREENSHOT_NAME = "screenshot";
 
-    private IntentFilter closeFormFilter = new IntentFilter("com.usabilla.closeForm");
+    private IntentFilter closeFormFilter = new IntentFilter(UbConstants.INTENT_CLOSE_FORM);
     private BroadcastReceiver receiverFormClosed;
-    private BroadcastReceiver receiverPlaystore;
 
     protected FakeR fakeR;
     
@@ -43,8 +43,7 @@ public class UsabillaActivity extends AppCompatActivity implements UsabillaFormC
         } catch (IOException e) {
             e.printStackTrace();
         }
-        final Usabilla usabilla = Usabilla.Companion.getInstance(this);
-        usabilla.loadFeedbackForm(this, formId, screenshot, null, this);
+        Usabilla.INSTANCE.loadFeedbackForm(formId, screenshot, null, this);
     }
 
     @Override
@@ -84,17 +83,6 @@ public class UsabillaActivity extends AppCompatActivity implements UsabillaFormC
                 UsabillaActivity.this.setResult(RESULT_OK, null);
                 UsabillaActivity.this.finish();
                 Toast.makeText(getApplicationContext(), "closed form", Toast.LENGTH_SHORT).show();
-            }
-        };
-        receiverPlaystore = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                final String appPackageName = getApplicationContext().getPackageName();
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                } catch (android.content.ActivityNotFoundException ex) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-                }
             }
         };
     }
