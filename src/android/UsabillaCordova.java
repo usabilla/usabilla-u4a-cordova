@@ -28,7 +28,6 @@ public class UsabillaCordova extends CordovaPlugin {
     private CallbackContext callbackContext;
     private String appId;
     private String formId;
-    private Usabilla usabilla;
 
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
@@ -72,12 +71,11 @@ public class UsabillaCordova extends CordovaPlugin {
     }
 
     private void initialize(HashMap<String, Object> customVars, String appId) {
-        usabilla = Usabilla.Companion.getInstance(cordova.getActivity());
-        usabilla.initialize(cordova.getActivity(), appId, () -> {
-            usabilla.updateFragmentManager(((FragmentActivity) cordova.getActivity()).getSupportFragmentManager());
+        Usabilla.INSTANCE.initialize(cordova.getActivity(), appId, null, () -> {
+            Usabilla.INSTANCE.updateFragmentManager(((FragmentActivity) cordova.getActivity()).getSupportFragmentManager());
             UsabillaCordova.this.onActivityResult(0, Activity.RESULT_OK, null);
         });
-        usabilla.setCustomVariables(customVars);
+        Usabilla.INSTANCE.setCustomVariables(customVars);
     }
 
     private void loadForm(JSONObject data, boolean withScreenshot) throws JSONException {
@@ -87,7 +85,7 @@ public class UsabillaCordova extends CordovaPlugin {
             intent.putExtra(FORM_ID, formId);
         }
         if (withScreenshot) {
-            final Bitmap screenshot = usabilla.takeScreenshot(cordova.getActivity());
+            final Bitmap screenshot = Usabilla.INSTANCE.takeScreenshot(cordova.getActivity());
             if (screenshot != null) {
                 try (FileOutputStream out = cordova.getContext().openFileOutput(SCREENSHOT_NAME, Context.MODE_PRIVATE)) {
                     screenshot.compress(Bitmap.CompressFormat.PNG, 100, out);
@@ -100,11 +98,11 @@ public class UsabillaCordova extends CordovaPlugin {
     }
 
     private void resetCampaignData() {
-        usabilla.resetCampaignData(cordova.getActivity(), () -> UsabillaCordova.this.onActivityResult(0, Activity.RESULT_OK, null));
+        Usabilla.INSTANCE.resetCampaignData(cordova.getActivity(), () -> UsabillaCordova.this.onActivityResult(123, Activity.RESULT_OK, null));
     }
 
     private void sendEvent(String eventName) {
-        usabilla.sendEvent(cordova.getActivity(), eventName);
+        Usabilla.INSTANCE.sendEvent(cordova.getActivity(), eventName);
         this.onActivityResult(0, Activity.RESULT_OK, null);
     }
 

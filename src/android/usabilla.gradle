@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.usabilla.sdk:ubform:5.0.+'
+    compile 'com.usabilla.sdk:ubform:6.+'
 }
 
 android {
