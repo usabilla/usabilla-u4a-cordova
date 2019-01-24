@@ -33,6 +33,12 @@ This version will depend on which version of XCode you are using.
 #### Android
 
 1. Be aware that Cordova's main `MainActivity.java` will be replaced with our custom. Usabilla is updated through fragmentManager and that activities rely on fragments.
+2. You might need to add a `gradle.properties` in the `platform/android/app/` with the contents
+```
+cdvCompileSdkVersion=android-28
+cdvBuildToolsVersion=28.0.3
+cdvMinSdkVersion=19
+```
 
 ### Requirements
 
