@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
 
 import com.usabilla.sdk.ubform.Usabilla;
+import com.usabilla.sdk.ubform.UsabillaReadyCallback;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -18,7 +19,7 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class UsabillaCordova extends CordovaPlugin {
+public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallback {
 
     private static final String APP_ID = "APP_ID";
     private static final String EVENT_NAME = "EVENT_NAME";
@@ -71,11 +72,14 @@ public class UsabillaCordova extends CordovaPlugin {
     }
 
     private void initialize(HashMap<String, Object> customVars, String appId) {
-        Usabilla.INSTANCE.initialize(cordova.getActivity(), appId, null, () -> {
-            Usabilla.INSTANCE.updateFragmentManager(((FragmentActivity) cordova.getActivity()).getSupportFragmentManager());
-            UsabillaCordova.this.onActivityResult(0, Activity.RESULT_OK, null);
-        });
+        Usabilla.INSTANCE.initialize(cordova.getActivity(), appId, null, this);
         Usabilla.INSTANCE.setCustomVariables(customVars);
+    }
+
+    @Override
+    public void onUsabillaInitialized() {
+        Usabilla.INSTANCE.updateFragmentManager(((FragmentActivity) cordova.getActivity()).getSupportFragmentManager());
+        UsabillaCordova.this.onActivityResult(0, Activity.RESULT_OK, null);
     }
 
     private void loadForm(JSONObject data, boolean withScreenshot) throws JSONException {
@@ -98,7 +102,7 @@ public class UsabillaCordova extends CordovaPlugin {
     }
 
     private void resetCampaignData() {
-        Usabilla.INSTANCE.resetCampaignData(cordova.getActivity(), () -> UsabillaCordova.this.onActivityResult(123, Activity.RESULT_OK, null));
+        Usabilla.INSTANCE.resetCampaignData(cordova.getActivity(), this);
     }
 
     private void sendEvent(String eventName) {
