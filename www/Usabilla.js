@@ -7,7 +7,7 @@ Usabilla.prototype.initialize = function(success, fail, appId, customVars) {
   var customVars = customVars || {};
   vars['APP_ID'] = appId;
   
-  Object.keys(customVars).map((key) => {
+  Object.keys(customVars).map(function(key) {
     var value = customVars[key];
     if (typeof value != "object") {
       vars[key] = value;
