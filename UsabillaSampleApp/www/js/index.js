@@ -36,20 +36,19 @@ var app = {
     },
 
     setButtonsDisabled: function(disabled) {
-        document.querySelectorAll('button').forEach(item => item.disabled = disabled);
+        Array.prototype.forEach.call (document.querySelectorAll('button'), function (item) {
+            item.disabled = disabled;
+        } );
     },
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = document.querySelectorAll('.received');
+        var receivedElement = parentElement.querySelector('.received');
 
         listeningElement.setAttribute('style', 'display:none;');
-
-        receivedElement.forEach(function(element) {
-            element.setAttribute('style', 'display:block;');
-        })
+        receivedElement.setAttribute('style', 'display:block;');
     },
 
     initApp: function() {
