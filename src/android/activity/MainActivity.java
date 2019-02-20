@@ -11,15 +11,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.usabilla.sdk.ubform.Usabilla;
+import com.usabilla.sdk.ubform.UbConstants;
 import com.usabilla.sdk.ubform.sdk.entity.FeedbackResult;
 import uk.co.reallysmall.cordova.plugin.fragment.CordovaFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private IntentFilter closeCampaignFilter = new IntentFilter("com.usabilla.closeCampaign");
+    private IntentFilter closeCampaignFilter = new IntentFilter(UbConstants.INTENT_CLOSE_CAMPAIGN);
     private BroadcastReceiver receiverCampaignClosed;
 
     public CordovaFragment currentFragment;
@@ -58,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        final Usabilla usabilla = Usabilla.Companion.getInstance(this);
-        usabilla.updateFragmentManager(getSupportFragmentManager());
         currentFragment.onResume();
     }
 

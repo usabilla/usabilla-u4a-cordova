@@ -8,8 +8,12 @@ repositories {
     }
 }
 
+cdvBuildToolsVersion="28.0.3"
+cdvCompileSdkVersion=28
+cdvMinSdkVersion=19
+
 dependencies {
-    compile 'com.usabilla.sdk:ubform:5.0.+'
+    compile 'com.usabilla.sdk:ubform:6.+'
 }
 
 android {
