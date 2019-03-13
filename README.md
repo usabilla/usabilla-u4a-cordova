@@ -1,11 +1,4 @@
-# README #
-
-* Summary of set up
-A plugin for using Usabilla in hybrid apps.
-
-
 [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/usabilla/usabilla-u4a-react-native/blob/develop/LICENSE)
-
 
 # Usabilla for Cordova
 
