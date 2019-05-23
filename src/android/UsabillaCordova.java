@@ -51,6 +51,9 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
                 final JSONObject dataObj = (JSONObject) data.get(0);
                 sendEvent((String) dataObj.get(EVENT_NAME));
                 return true;
+            case "dismiss":
+                dismiss();
+                return true;
             default:
                 return false;
         }
@@ -126,5 +129,13 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
             }
         }
         return customVars;
+    }
+
+    private void dismiss() {
+        if (Usabilla.INSTANCE.dismiss(cordova.getActivity())) {
+            callbackContext.success();
+            return;
+        }
+        callbackContext.error("No forms to dismiss");
     }
 }

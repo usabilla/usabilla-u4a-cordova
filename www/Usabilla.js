@@ -71,4 +71,12 @@ Usabilla.prototype.resetCampaignData = function(success, fail) {
     "resetCampaignData");
 };
 
+Usabilla.prototype.dismiss = function(success, fail) {
+  return cordova.exec(
+    success,
+    fail,
+    "UsabillaCordova",
+    "dismiss");
+};
+
 window.Usabilla = new Usabilla();
