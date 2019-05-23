@@ -16,8 +16,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallback {
 
@@ -25,6 +27,8 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
     private static final String EVENT_NAME = "EVENT_NAME";
     private static final String FORM_ID = "FORM_ID";
     private static final String SCREENSHOT_NAME = "screenshot";
+    private static final String MASKS = "MASKS";
+    private static final String MASK_CHAR = "MASK_CHAR";
 
     private CallbackContext callbackContext;
     private String appId;
@@ -53,6 +57,9 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
                 return true;
             case "dismiss":
                 dismiss();
+                return true;
+            case "setDataMasking":
+                setDataMasking(data.getJSONObject(0));
                 return true;
             default:
                 return false;
@@ -137,5 +144,17 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
             return;
         }
         callbackContext.error("No forms to dismiss");
+    }
+
+    private void setDataMasking(JSONObject data) throws JSONException {
+        final JSONArray masks = data.getJSONArray(MASKS);
+        final String maskCharacter = data.getString(MASK_CHAR);
+        List<String> maskList = new ArrayList<>();
+
+        for (int i = 0; i < masks.length(); i++) {
+            maskList.add(masks.getString(i));
+        }
+
+        Usabilla.INSTANCE.setDataMasking(maskList, maskCharacter.charAt(0));
     }
 }
