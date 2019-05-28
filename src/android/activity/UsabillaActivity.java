@@ -1,13 +1,15 @@
 package com.usabilla;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -19,6 +21,7 @@ import com.usabilla.sdk.ubform.sdk.form.FormClient;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 public class UsabillaActivity extends AppCompatActivity implements UsabillaFormCallback {
 
@@ -80,10 +83,25 @@ public class UsabillaActivity extends AppCompatActivity implements UsabillaFormC
         receiverFormClosed = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                UsabillaActivity.this.setResult(RESULT_OK, null);
-                UsabillaActivity.this.finish();
-                Toast.makeText(getApplicationContext(), "closed form", Toast.LENGTH_SHORT).show();
+                getSupportFragmentManager().executePendingTransactions();
+
+                List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                DialogFragment currentFragment = (DialogFragment) fragments.get(fragments.size() - 1);
+                Dialog ratingDialog = currentFragment.getDialog();
+
+                if (ratingDialog == null) {
+                    finishActivity();
+                    return;
+                }
+
+                ratingDialog.setOnDismissListener(dialog -> finishActivity());
             }
         };
+    }
+
+    private void finishActivity() {
+        UsabillaActivity.this.setResult(RESULT_OK, null);
+        UsabillaActivity.this.finish();
+        Toast.makeText(getApplicationContext(), "closed form", Toast.LENGTH_SHORT).show();
     }
 }
