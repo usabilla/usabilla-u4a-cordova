@@ -1,7 +1,7 @@
 import Usabilla
 
 protocol ResultDelegate: class {
-    func success(completed: Bool)
+    func success(completed: Any)
     func error()
 }
 
