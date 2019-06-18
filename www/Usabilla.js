@@ -79,6 +79,14 @@ Usabilla.prototype.dismiss = function(success, fail) {
     "dismiss");
 };
 
+Usabilla.prototype.getDefaultDataMasks = function(success, fail) {
+  return cordova.exec(
+      success,
+      fail,
+      "UsabillaCordova",
+      "getDefaultDataMasks");
+};
+
 Usabilla.prototype.setDataMasking = function(success, fail, masks, maskCharacter) {
   var vars = {};
   vars['MASKS'] = masks;

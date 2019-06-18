@@ -6,6 +6,8 @@ import Usabilla
     var appId: String?
     var customVariables: [String: Any]?
     var eventName: String?
+    var masks: [String]?
+    var maskChar: String?
 
     // Extracts the variables sent from Usabilla.js
     func extractCustomVariables(command: CDVInvokedUrlCommand) {
@@ -18,6 +20,10 @@ import Usabilla
                     self.appId = value as? String
                 } else if (key == "FORM_ID") {
                     self.formId = value as? String
+                } else if (key == "MASKS") {
+                    self.masks = value as? [String]
+                } else if (key == "MASK_CHAR") {
+                    self.maskChar = value as? String
                 } else {
                     if (value is String) {
                         arguments[key] = value as? String
@@ -98,8 +104,37 @@ import Usabilla
             self.success(completed: true)
         }
     }
+
+    // Set Dismiss to close the campaign
+    @objc(dismiss:)
+    func dismiss(_ command: CDVInvokedUrlCommand) {
+        self.command = command;
+        let _ = Usabilla.dismiss()
+        self.success(completed: true)
+    }
+
+    // Default Data masking
+    @objc(getDefaultDataMasks:)
+    func getDefaultDataMasks(_ command: CDVInvokedUrlCommand) {
+        self.command = command;
+        let str = Usabilla.defaultDataMasks
+        self.success(completed: str)
+    }
+
+    // Set Data masking
+    @objc(setDataMasking:)
+    func setDataMasking(_ command: CDVInvokedUrlCommand) {
+        self.command = command;
+        self.extractCustomVariables(command: command);
+        if let maskCharacter = self.maskChar?.first, let mask = self.masks {
+            Usabilla.setDataMasking(masks: mask, maskCharacter: maskCharacter)
+        } else {
+            Usabilla.setDataMasking(masks: Usabilla.defaultDataMasks, maskCharacter: "X")
+        }
+        self.success(completed: true)
+    }
     
-    func success(completed: Bool) {
+    func success(completed: Any) {
         let result = ["completed": completed] as [AnyHashable : Any]
         let pluginResult = CDVPluginResult(
             status: CDVCommandStatus_OK,
