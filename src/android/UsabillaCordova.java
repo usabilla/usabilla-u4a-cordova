@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
 
 import com.usabilla.sdk.ubform.Usabilla;
+import com.usabilla.sdk.ubform.UbConstants;
 import com.usabilla.sdk.ubform.UsabillaReadyCallback;
 
 import org.apache.cordova.CallbackContext;
@@ -60,6 +61,9 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
                 return true;
             case "setDataMasking":
                 setDataMasking(data.getJSONObject(0));
+                return true;
+            case "getDefaultDataMasks":
+                getDefaultDataMasks();    
                 return true;
             default:
                 return false;
@@ -156,5 +160,15 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
         }
 
         Usabilla.INSTANCE.setDataMasking(maskList, maskCharacter.charAt(0));
+    }
+
+    private void getDefaultDataMasks() {
+        try {
+            final JSONObject result = new JSONObject();
+            result.put("completed", UbConstants.getDefaultDataMasks());
+            callbackContext.success(result);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
