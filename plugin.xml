@@ -1,48 +1,50 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="usabilla-cordova" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
-  <name>UsabillaCordova</name>
-  <js-module name="UsabillaCordova" src="www/Usabilla.js">
-    <clobbers target="plugins.Usabilla" />
-  </js-module>
-  <platform name="android">
-    <dependency id="cordova-plugin-android-fragmentactivity" />
-    <config-file parent="/*" target="res/xml/config.xml">
-      <feature name="UsabillaCordova">
-        <param name="android-package" value="com.usabilla.UsabillaCordova" />
-      </feature>
-    </config-file>
-    <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <activity 
-          android:configChanges="orientation|screenSize" 
-          android:screenOrientation="portrait"
-          android:name="com.usabilla.UsabillaActivity"
-          android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        </activity>
-    </config-file>
-    <config-file parent="/*" target="AndroidManifest.xml">    
-    </config-file>
-    <framework src="com.android.support:appcompat-v7:18.0.+"/>
-    <source-file src="src/android/activity/MainActivity.java" target-dir="src/com/usabilla"/>
-    <source-file src="src/android/activity/UsabillaActivity.java" target-dir="src/com/usabilla"/>
-    <source-file src="src/android/UsabillaCordova.java" target-dir="src/com/usabilla" />
-    <source-file src="src/android/activity/FakeR.java" target-dir="src/com/usabilla"/>
-    <source-file src="src/android/activity/usabilla_activity.xml" target-dir="res/layout"/>
-    <framework src="src/android/usabilla.gradle" custom="true" type="gradleReference" />
-    <hook type="after_plugin_install" src="scripts/android/afterPluginInstall.js"/>
-  </platform>
-  <platform name="ios">
-    <config-file target="config.xml" parent="/*">
-      <feature name="UsabillaCordova">
-        <param name="ios-package" value="UsabillaCordova" />
-      </feature>
-    </config-file>
-    <dependency id="cordova-plugin-cocoapod-support"/>
-    <dependency id="cordova-plugin-add-swift-support" version="1.7.2">
-      <preference name="UseSwiftLanguageVersion" value="3.3" />
-    </dependency>
-    <pods-config ios-min-version="9.0" use-frameworks="true"/>
-    <source-file src="src/ios/UsabillaCordova.swift" />
-    <source-file src="src/ios/FeedbackController.swift" />
-    <pod name="Usabilla" spec="~>6.0"/>
-  </platform>
+<plugin id="usabilla-cordova" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>UsabillaCordova</name>
+    <js-module name="UsabillaCordova" src="www/Usabilla.js">
+        <clobbers target="plugins.Usabilla"/>
+    </js-module>
+    <platform name="android">
+        <dependency id="cordova-plugin-android-fragmentactivity"/>
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="UsabillaCordova">
+                <param name="android-package" value="com.usabilla.UsabillaCordova"/>
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <activity
+                    android:configChanges="orientation|screenSize"
+                    android:screenOrientation="portrait"
+                    android:name="com.usabilla.UsabillaActivity"
+                    android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            </activity>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml">
+        </config-file>
+        <framework src="com.android.support:appcompat-v7:18.0.+"/>
+        <source-file src="src/android/activity/MainActivity.java" target-dir="src/com/usabilla"/>
+        <source-file src="src/android/activity/UsabillaActivity.java" target-dir="src/com/usabilla"/>
+        <source-file src="src/android/UsabillaCordova.java" target-dir="src/com/usabilla"/>
+        <source-file src="src/android/activity/FakeR.java" target-dir="src/com/usabilla"/>
+        <source-file src="src/android/activity/usabilla_activity.xml" target-dir="res/layout"/>
+        <framework src="src/android/usabilla.gradle" custom="true" type="gradleReference"/>
+        <hook type="after_plugin_install" src="scripts/android/afterPluginInstall.js"/>
+    </platform>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="UsabillaCordova">
+                <param name="ios-package" value="UsabillaCordova"/>
+            </feature>
+        </config-file>
+        <dependency id="cordova-plugin-cocoapod-support"/>
+        <dependency id="cordova-plugin-add-swift-support" version="1.7.2">
+            <preference name="UseSwiftLanguageVersion" value="3.3"/>
+        </dependency>
+        <pods-config ios-min-version="9.0" use-frameworks="true"/>
+        <source-file src="src/ios/UsabillaCordova.swift"/>
+        <source-file src="src/ios/FeedbackController.swift"/>
+        <pod name="Usabilla"
+             options=":git => 'https://github.com/usabilla/usabilla-u4a-ios-swift-sdk', :tag => 'v6.4.0-Xcode-11'"/>
+    </platform>
 </plugin>
