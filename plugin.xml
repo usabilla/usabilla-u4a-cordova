@@ -39,7 +39,7 @@
         </config-file>
         <dependency id="cordova-plugin-cocoapod-support"/>
         <dependency id="cordova-plugin-add-swift-support" version="1.7.2">
-            <preference name="UseSwiftLanguageVersion" value="3.3"/>
+            <preference name="UseSwiftLanguageVersion" value="4.0"/>
         </dependency>
         <pods-config ios-min-version="9.0" use-frameworks="true"/>
         <source-file src="src/ios/UsabillaCordova.swift"/>
