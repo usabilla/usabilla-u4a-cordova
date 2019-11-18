@@ -14,14 +14,19 @@ To install the Usabilla SDK into your Cordova App:
 cordova plugin add usabilla-cordova --save
 ```
 
-### Additional setup
+## Additional setup
 #### iOS
 
 1. The native Usabilla SDK is written in Swift, So you will have to add the Swift version to your `config.xml` file.
 ```
-<preference name="UseSwiftLanguageVersion" value="3.3" />
+<preference name="UseSwiftLanguageVersion" value="4.0" />
 ```
-This version will depend on which version of XCode you are using. 
+The Usabilla bridge is compatible with Cordova 8.  Currently Cordova 9+ is not supported.
+
+The Native SDK is build for Xcode 11+, and is compiled with Module Format Stability allowing it to use different version of Swift 
+If you use an earlier version of Xcode, change the pod-file, so it uses the correct Usabilla version.
+see the [native SDKs readme.md](https://github.com/usabilla/usabilla-u4a-ios-swift-sdk) for instructions. 
+
 
 #### Android
 
