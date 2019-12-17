@@ -1,6 +1,17 @@
+import Foundation
 import Usabilla
+import UIKit
 
-@objc(UsabillaCordova) class UsabillaCordova : CDVPlugin, ResultDelegate {
+@objc(UsabillaCordova)
+class UsabillaCordova: CDVPlugin {
+
+    @objc weak var formNavigationController: UINavigationController?
+    
+    override init() {
+        super.init()
+        Usabilla.delegate = self
+    }
+    
     var command: CDVInvokedUrlCommand?
     var formId: String?
     var appId: String?
@@ -50,16 +61,8 @@ import Usabilla
     func loadFeedbackForm(command: CDVInvokedUrlCommand) {
         self.command = command;
         self.extractCustomVariables(command: command)
-        
-        let feedbackController: FeedbackController = FeedbackController()
-        feedbackController.formId = self.formId
-        feedbackController.delegate = self
-        
-        self.viewController?.present(
-            feedbackController,
-            animated: true,
-            completion: nil
-        )
+        let formID = self.formId!
+        Usabilla.loadFeedbackForm(formID)
     }
 
     // Load Usabilla passive forms with the visibile view screenshot
@@ -67,20 +70,15 @@ import Usabilla
     func loadFeedbackFormWithCurrentViewScreenshot(command: CDVInvokedUrlCommand) {
         self.command = command;
         self.extractCustomVariables(command: command)
-        
-        let feedbackController: FeedbackController = FeedbackController()
-        feedbackController.formId = self.formId
-        feedbackController.delegate = self
-        if let topController = UIApplication.topViewController() {
-            let screenshot = Usabilla.takeScreenshot(topController.view)
-            feedbackController.screenshot = screenshot
+        let formID = self.formId!
+        if let rootVC = UIApplication.shared.keyWindow?.rootViewController {
+            let screenshot = self.takeScreenshot(view: rootVC.view)
+            Usabilla.loadFeedbackForm(formID, screenshot: screenshot)
         }
+    }
 
-        self.viewController?.present(
-            feedbackController,
-            animated: true,
-            completion: nil
-        )
+    func takeScreenshot(view: UIView) -> UIImage {
+        return Usabilla.takeScreenshot(view)!
     }
 
     // Send events to trigger campaigns
@@ -89,7 +87,6 @@ import Usabilla
         self.command = command;
         extractCustomVariables(command: command)
         Usabilla.sendEvent(event: self.eventName!)
-        self.success(completed: true)
     }
     
     // Reset campaign data to a clean state
@@ -154,19 +151,36 @@ import Usabilla
     }
 }
 
-extension UIApplication {
-    class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-        if let navigationController = controller as? UINavigationController {
-            return topViewController(controller: navigationController.visibleViewController)
+extension UsabillaCordova: UsabillaDelegate {
+      func formDidLoad(form: UINavigationController) {
+        formNavigationController = form
+        if let rootVC = UIApplication.shared.keyWindow?.rootViewController {
+            rootVC.present(formNavigationController!, animated: true, completion: nil)
         }
-        if let tabController = controller as? UITabBarController {
-            if let selected = tabController.selectedViewController {
-                return topViewController(controller: selected)
-            }
+    }
+
+    func formDidFailLoading(error: UBError) {
+        formNavigationController = nil
+        self.error()
+    }
+
+    func formDidClose(formID: String, withFeedbackResults results: [FeedbackResult], isRedirectToAppStoreEnabled: Bool) {
+        var rnResults: [[String : Any]] = []
+        for result in results {
+            let dictionary: Dictionary = ["rating": result.rating ?? 0, "abandonedPageIndex": result.abandonedPageIndex ?? 0, "sent": result.sent] as [String : Any]
+            rnResults.append(dictionary)
         }
-        if let presented = controller?.presentedViewController {
-            return topViewController(controller: presented)
-        }
-        return controller
+        
+        let resultCB = ["formId": formID, "results": rnResults, "isRedirectToAppStoreEnabled": isRedirectToAppStoreEnabled] as [String : Any]
+        formNavigationController = nil
+        self.success(completed: resultCB)
+    }
+    
+    func campaignDidClose(withFeedbackResult result: FeedbackResult, isRedirectToAppStoreEnabled: Bool) {
+        let rnResult: [String : Any] = ["rating": result.rating ?? 0, "abandonedPageIndex": result.abandonedPageIndex ?? 0, "sent": result.sent] as [String : Any]
+        
+        let resultCB = ["result": rnResult, "isRedirectToAppStoreEnabled": isRedirectToAppStoreEnabled] as [String : Any]
+        formNavigationController = nil
+        self.success(completed: resultCB)
     }
 }
