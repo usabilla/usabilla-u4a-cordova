@@ -11,7 +11,6 @@ import Usabilla
 
     // Extracts the variables sent from Usabilla.js
     func extractCustomVariables(command: CDVInvokedUrlCommand) {
-        var arguments: [String: Any] = [:]
         for (_, element) in command.arguments.enumerated() {
             for (key, value) in element as! Dictionary<String, Any> {
                 if (key == "EVENT_NAME") {
@@ -24,16 +23,11 @@ import Usabilla
                     self.masks = value as? [String]
                 } else if (key == "MASK_CHAR") {
                     self.maskChar = value as? String
-                } else {
-                    if (value is String) {
-                        arguments[key] = value as? String
-                    } else if (value is Bool) {
-                        arguments[key] = value as? Bool
-                    }                    
+                } else if (key == "CUSTOM_VARS") {
+                    self.customVariables = value as? [String : Any]
                 }
             }
         }
-        self.customVariables = arguments
     }
 
     // Iinitialize the SDK with your appId to target campaigns
@@ -41,12 +35,13 @@ import Usabilla
     func initialize(command: CDVInvokedUrlCommand) {
         self.command = command;
         extractCustomVariables(command: command)
-        Usabilla.customVariables = self.customVariables!
+        let newCustomVariables = self.customVariables!.mapValues { String(describing: $0) }
         Usabilla.initialize(
             appID: self.appId,
             completion: {
                 self.success(completed: true)
         })
+        Usabilla.customVariables = self.customVariables!
     }
 
     // Load Usabilla passive forms with form ids
