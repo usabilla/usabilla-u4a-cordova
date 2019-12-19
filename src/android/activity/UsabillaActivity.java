@@ -83,24 +83,13 @@ public class UsabillaActivity extends AppCompatActivity implements UsabillaFormC
         receiverFormClosed = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                getSupportFragmentManager().executePendingTransactions();
-
-                List<Fragment> fragments = getSupportFragmentManager().getFragments();
-                DialogFragment currentFragment = (DialogFragment) fragments.get(fragments.size() - 1);
-                Dialog ratingDialog = currentFragment.getDialog();
-
-                if (ratingDialog == null) {
-                    finishActivity();
-                    return;
-                }
-
-                ratingDialog.setOnDismissListener(dialog -> finishActivity());
+                finishActivity(intent);
             }
         };
     }
 
-    private void finishActivity() {
-        UsabillaActivity.this.setResult(RESULT_OK, null);
+    private void finishActivity(Intent intent) {
+        UsabillaActivity.this.setResult(RESULT_OK, intent);
         UsabillaActivity.this.finish();
         Toast.makeText(getApplicationContext(), "closed form", Toast.LENGTH_SHORT).show();
     }
