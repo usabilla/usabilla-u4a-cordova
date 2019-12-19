@@ -54,7 +54,7 @@ var app = {
     initApp: function() {
         this.setButtonsDisabled(true);
         var self = this;
-        var appId = "{YOUR_APP_ID_HERE}}";
+        var appId = "{YOUR_APP_ID_HERE}";
         var customVars = {
             type: 'premium'
         };
@@ -73,16 +73,11 @@ var app = {
         var self = this;
         var sendFeedback = document.getElementById("feedback-button");
         sendFeedback.onclick = function() {
-            self.setButtonsDisabled(false);
+            self.setButtonsDisabled(true);
             var formId = document.getElementById("form-id").value;
-
             if (!formId) {
                 alert("Input a form id to submit");
             } else {
-                var customVars = {
-                    fromExampleApp: true,
-                    foo: 'var'
-                };
                 Usabilla.loadFeedbackForm(
                     function() {
                         self.setButtonsDisabled(false);
@@ -114,12 +109,10 @@ var app = {
         var sendEvent = document.getElementById("event-button");
         sendEvent.onclick = function() {
             var eventId = document.getElementById("event-id").value;
-            var appId = "{YOUR_APP_ID_HERE}";
             self.setButtonsDisabled(true);
             if (!eventId) {
-                alert("Input a form id to submit");
+                alert("Input an event id to submit");
             } else {
-                
                 Usabilla.sendEvent(
                     function() {
                         self.setButtonsDisabled(false);
