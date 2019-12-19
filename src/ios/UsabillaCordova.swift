@@ -25,6 +25,8 @@ import Usabilla
                     self.maskChar = value as? String
                 } else if (key == "CUSTOM_VARS") {
                     self.customVariables = value as? [String : Any]
+                } else {
+                    debugPrint(key, value, separator: " -- ")
                 }
             }
         }
@@ -41,7 +43,7 @@ import Usabilla
             completion: {
                 self.success(completed: true)
         })
-        Usabilla.customVariables = self.customVariables!
+        Usabilla.customVariables = newCustomVariables
     }
 
     // Load Usabilla passive forms with form ids
