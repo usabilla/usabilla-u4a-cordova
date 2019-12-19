@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.usabilla.sdk.ubform.Usabilla;
 import com.usabilla.sdk.ubform.UbConstants;
@@ -30,6 +31,7 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
     private static final String SCREENSHOT_NAME = "screenshot";
     private static final String MASKS = "MASKS";
     private static final String MASK_CHAR = "MASK_CHAR";
+    private static final String CUSTOM_VARS = "CUSTOM_VARS";
 
     private CallbackContext callbackContext;
     private String appId;
@@ -134,8 +136,10 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
                     formId = (String) value;
                 } else if ((APP_ID).equals(key)) {
                     appId = (String) value;
+                } else if ((CUSTOM_VARS).equals(key)) {
+                    Log.d("CUSTOM_VARS",value.toString());
                 } else {
-                    customVars.put(key, value);
+                    customVars.put(key, value.toString());
                 }
             }
         }
