@@ -1,15 +1,18 @@
 package com.usabilla;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-
-import com.usabilla.sdk.ubform.Usabilla;
+import android.support.v4.content.LocalBroadcastManager;
 import com.usabilla.sdk.ubform.UbConstants;
+import com.usabilla.sdk.ubform.Usabilla;
 import com.usabilla.sdk.ubform.UsabillaReadyCallback;
+import com.usabilla.sdk.ubform.sdk.entity.FeedbackResult;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -32,6 +35,21 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
     private static final String MASKS = "MASKS";
     private static final String MASK_CHAR = "MASK_CHAR";
     private static final String CUSTOM_VARS = "CUSTOM_VARS";
+
+    private static final String KEY_RATING = "rating";
+    private static final String KEY_ABANDONED_PAGE_INDEX = "abandonedPageIndex";
+    private static final String KEY_SENT = "sent";
+
+    private IntentFilter closeCampaignFilter = new IntentFilter(UbConstants.INTENT_CLOSE_CAMPAIGN);
+    private BroadcastReceiver receiverCampaignClosed = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+           if (intent != null) {
+               final JSONObject result = prepareResult(intent);
+               callbackContext.success(result);
+           }
+        }
+    };
 
     private CallbackContext callbackContext;
     private String appId;
@@ -65,31 +83,49 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
                 setDataMasking(data.getJSONObject(0));
                 return true;
             case "getDefaultDataMasks":
-                getDefaultDataMasks();    
+                getDefaultDataMasks();
                 return true;
             default:
                 return false;
         }
     }
 
+    private JSONObject getResult(Intent intent) {
+        final FeedbackResult res = intent.getParcelableExtra(FeedbackResult.INTENT_FEEDBACK_RESULT);
+        final JSONObject result = new JSONObject();
+        try {
+            result.put(KEY_RATING, res.getRating());
+            result.put(KEY_ABANDONED_PAGE_INDEX, res.getAbandonedPageIndex());
+            result.put(KEY_SENT, res.isSent());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 5) {
             callbackContext.error("GENERAL_ERROR");
+            return;
+        }
+        if (data != null) {
+            final JSONObject result = prepareResult(data);
+            callbackContext.success(result);
         } else {
+            final JSONObject result = new JSONObject();
             try {
-                JSONObject result = new JSONObject();
                 result.put("completed", resultCode != Activity.RESULT_CANCELED);
-                callbackContext.success(result);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            callbackContext.success();
+            callbackContext.success(result);
         }
     }
 
     private void initialize(HashMap<String, Object> customVars, String appId) {
         Usabilla.INSTANCE.initialize(cordova.getActivity(), appId, null, this);
         Usabilla.INSTANCE.setCustomVariables(customVars);
+        LocalBroadcastManager.getInstance(cordova.getActivity()).registerReceiver(receiverCampaignClosed, closeCampaignFilter);
     }
 
     @Override
@@ -123,7 +159,6 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
 
     private void sendEvent(String eventName) {
         Usabilla.INSTANCE.sendEvent(cordova.getActivity(), eventName);
-        this.onActivityResult(0, Activity.RESULT_OK, null);
     }
 
     private HashMap<String, Object> parseOptions(JSONObject dataObj) throws JSONException {
@@ -174,5 +209,17 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private JSONObject prepareResult(Intent intent) {
+        final JSONObject result = new JSONObject();
+        final JSONObject resultData = new JSONObject();
+        try {
+            resultData.put("results", getResult(intent));
+            result.put("completed", resultData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
