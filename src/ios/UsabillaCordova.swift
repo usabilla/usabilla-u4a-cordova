@@ -37,13 +37,12 @@ import Usabilla
     func initialize(command: CDVInvokedUrlCommand) {
         self.command = command;
         extractCustomVariables(command: command)
-        let newCustomVariables = self.customVariables!.mapValues { String(describing: $0) }
         Usabilla.initialize(
             appID: self.appId,
             completion: {
                 self.success(completed: true)
         })
-        Usabilla.customVariables = newCustomVariables
+        Usabilla.customVariables = self.customVariables!.mapValues { String(describing: $0) }
     }
 
     // Load Usabilla passive forms with form ids
