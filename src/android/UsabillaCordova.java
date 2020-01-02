@@ -45,7 +45,7 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
         @Override
         public void onReceive(Context context, Intent intent) {
            if (intent != null) {
-               final JSONObject result = prepareResult(intent);
+               final JSONObject result = prepareResult(intent, FeedbackResult.INTENT_FEEDBACK_RESULT_CAMPAIGN);
                callbackContext.success(result);
            }
         }
@@ -90,8 +90,8 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
         }
     }
 
-    private JSONObject getResult(Intent intent) {
-        final FeedbackResult res = intent.getParcelableExtra(FeedbackResult.INTENT_FEEDBACK_RESULT);
+    private JSONObject getResult(Intent intent, String feedbackResultType) {
+        final FeedbackResult res = intent.getParcelableExtra(feedbackResultType);
         final JSONObject result = new JSONObject();
         try {
             result.put(KEY_RATING, res.getRating());
@@ -109,7 +109,7 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
             return;
         }
         if (data != null) {
-            final JSONObject result = prepareResult(data);
+            final JSONObject result = prepareResult(data, FeedbackResult.INTENT_FEEDBACK_RESULT);
             callbackContext.success(result);
         } else {
             final JSONObject result = new JSONObject();
@@ -211,11 +211,12 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
         }
     }
 
-    private JSONObject prepareResult(Intent intent) {
+    private JSONObject prepareResult(Intent intent, String feedbackResultType) {
         final JSONObject result = new JSONObject();
         final JSONObject resultData = new JSONObject();
         try {
-            resultData.put("results", getResult(intent));
+            String res = (feedbackResultType == FeedbackResult.INTENT_FEEDBACK_RESULT) ? "results" : "result";
+            resultData.put(res, getResult(intent, feedbackResultType));
             result.put("completed", resultData);
         } catch (JSONException e) {
             e.printStackTrace();
