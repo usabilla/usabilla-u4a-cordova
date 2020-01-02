@@ -42,7 +42,6 @@
     </dependency>
     <pods-config ios-min-version="9.0" use-frameworks="true"/>
     <source-file src="src/ios/UsabillaCordova.swift" />
-    <source-file src="src/ios/FeedbackController.swift" />
     <pod name="Usabilla" spec="~>6.0"/>
   </platform>
 </plugin>
