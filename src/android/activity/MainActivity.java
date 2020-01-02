@@ -11,10 +11,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.usabilla.sdk.ubform.Usabilla;
 import com.usabilla.sdk.ubform.UbConstants;
 import com.usabilla.sdk.ubform.sdk.entity.FeedbackResult;
 import uk.co.reallysmall.cordova.plugin.fragment.CordovaFragment;
