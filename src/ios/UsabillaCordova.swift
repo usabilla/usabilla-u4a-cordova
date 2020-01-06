@@ -7,11 +7,6 @@ class UsabillaCordova: CDVPlugin {
 
     @objc weak var formNavigationController: UINavigationController?
     
-    override init() {
-        super.init()
-        Usabilla.delegate = self
-    }
-    
     var command: CDVInvokedUrlCommand?
     var formId: String?
     var appId: String?
@@ -22,6 +17,7 @@ class UsabillaCordova: CDVPlugin {
 
     // Extracts the variables sent from Usabilla.js
     func extractCustomVariables(command: CDVInvokedUrlCommand) {
+        Usabilla.delegate = self
         for (_, element) in command.arguments.enumerated() {
             for (key, value) in element as! Dictionary<String, Any> {
                 if (key == "EVENT_NAME") {
