@@ -5,6 +5,10 @@
 Usabilla for Apps allows you to collect feedback from your users with great ease and flexibility.
 This Cordova bridge to the Native Usabilla SDK allows you to load passive feedback forms and submit results from a Cordova/PhoneGap app.
 
+## Support
+
+If you require help with the implementation, want to report an issue, or have a question please reach out to our Support Team via support@usabilla.com. When contacting our Support Team please make sure you include your Usabilla Account Name and the name of your Customer Success Manager.
+
 ## Installation
 
 To install the Usabilla SDK into your Cordova App:
@@ -88,7 +92,7 @@ This method will take a screenshot of the current visible view and pre-fill the 
 
 ### Campaigns
 
-In order to be able to run campaigns in your app, you should first start by initializing the SDK as seen before
+In order to be able to run campaigns in your app, you should first start by initializing the SDK as seen before.
 
 This call loads and updates all your campaigns locally and you can start targeting them by sending events from your app using the method:
 
