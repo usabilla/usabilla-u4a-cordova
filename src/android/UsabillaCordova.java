@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.support.v4.content.LocalBroadcastManager;
+
+import androidx.fragment.app.FragmentActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.usabilla.sdk.ubform.UbConstants;
 import com.usabilla.sdk.ubform.Usabilla;
 import com.usabilla.sdk.ubform.UsabillaReadyCallback;
