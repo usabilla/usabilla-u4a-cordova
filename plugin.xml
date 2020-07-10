@@ -5,7 +5,8 @@
     <clobbers target="plugins.Usabilla" />
   </js-module>
   <platform name="android">
-    <dependency id="cordova-plugin-android-fragmentactivity" />
+    <dependency id="cordova-plugin-android-fragmentactivity"/>
+    <dependency id="cordova-plugin-androidx"/>
     <config-file parent="/*" target="res/xml/config.xml">
       <feature name="UsabillaCordova">
         <param name="android-package" value="com.usabilla.UsabillaCordova" />
@@ -21,7 +22,7 @@
     </config-file>
     <config-file parent="/*" target="AndroidManifest.xml">    
     </config-file>
-    <framework src="com.android.support:appcompat-v7:18.0.+"/>
+    <framework src="androidx.localbroadcastmanager:localbroadcastmanager:1.0.0"/>
     <source-file src="src/android/activity/MainActivity.java" target-dir="src/com/usabilla"/>
     <source-file src="src/android/activity/UsabillaActivity.java" target-dir="src/com/usabilla"/>
     <source-file src="src/android/UsabillaCordova.java" target-dir="src/com/usabilla" />
