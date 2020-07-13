@@ -25,7 +25,7 @@ cordova plugin add usabilla-cordova --save
 ```
 <preference name="UseSwiftLanguageVersion" value="4.0" />
 ```
-The Usabilla bridge is compatible with Cordova 8.  Currently Cordova 9+ is not supported.
+This version of the Usabilla Cordova bridge supports stable `Cordova v9`, works with the latest release of `XCode 11` and targets the use of `Android X` libraries.
 
 The Native SDK is build for Xcode 11+, and is compiled with Module Format Stability allowing it to use different version of Swift 
 If you use an earlier version of Xcode, change the pod-file, so it uses the correct Usabilla version.
