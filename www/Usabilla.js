@@ -101,4 +101,49 @@ Usabilla.prototype.setDataMasking = function(success, fail, masks, maskCharacter
     ]);
 };
 
+Usabilla.prototype.preloadFeedbackForms = function(success, fail, formIds) {
+  var vars = {};
+  vars['FORM_IDs'] = formIds;
+  return cordova.exec(
+      success,
+      fail,
+      "UsabillaCordova",
+      "preloadFeedbackForms", [
+        vars
+      ]);
+};
+
+Usabilla.prototype.removeCachedForms = function(success, fail) {
+  return cordova.exec(
+      success,
+      fail,
+      "UsabillaCordova",
+      "removeCachedForms");
+};
+
+Usabilla.prototype.setDebugEnabled = function(success, fail, debugEnabled) {
+  var vars = {};
+  vars['DEBUG_ENABLED'] = debugEnabled;
+  return cordova.exec(
+      success,
+      fail,
+      "UsabillaCordova",
+      "setDebugEnabled", [
+        vars
+      ]);
+};
+
+// Only for iOS
+Usabilla.prototype.loadLocalizedStringFile = function(success, fail, localizedStringFile) {
+  var vars = {};
+  vars['LOCALIZED_STRING_FILENAME'] = localizedStringFile;
+  return cordova.exec(
+      success,
+      fail,
+      "UsabillaCordova",
+      "loadLocalizedStringFile", [
+        vars
+      ]);
+};
+
 window.Usabilla = new Usabilla();
