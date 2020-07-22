@@ -8,13 +8,17 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.usabilla.sdk.ubform.UbConstants;
 import com.usabilla.sdk.ubform.Usabilla;
+import com.usabilla.sdk.ubform.UsabillaFormCallback;
 import com.usabilla.sdk.ubform.UsabillaReadyCallback;
 import com.usabilla.sdk.ubform.sdk.entity.FeedbackResult;
+import com.usabilla.sdk.ubform.sdk.form.FormClient;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -22,40 +26,66 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallback {
 
+public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallback, UsabillaFormCallback {
+
+    public static final String FRAGMENT_TAG = "passive form";
     private static final String APP_ID = "APP_ID";
     private static final String EVENT_NAME = "EVENT_NAME";
     private static final String FORM_ID = "FORM_ID";
-    private static final String SCREENSHOT_NAME = "screenshot";
     private static final String MASKS = "MASKS";
     private static final String MASK_CHAR = "MASK_CHAR";
     private static final String CUSTOM_VARS = "CUSTOM_VARS";
-
     private static final String KEY_RATING = "rating";
     private static final String KEY_ABANDONED_PAGE_INDEX = "abandonedPageIndex";
     private static final String KEY_SENT = "sent";
-
+    private static final String KEY_ERROR_MSG = "error";
+    public Fragment passiveFormFragment;
     private IntentFilter closeCampaignFilter = new IntentFilter(UbConstants.INTENT_CLOSE_CAMPAIGN);
+    private IntentFilter closeFormFilter = new IntentFilter(UbConstants.INTENT_CLOSE_FORM);
+    private CallbackContext callbackContext;
     private BroadcastReceiver receiverCampaignClosed = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-           if (intent != null) {
-               final JSONObject result = prepareResult(intent, FeedbackResult.INTENT_FEEDBACK_RESULT_CAMPAIGN);
-               callbackContext.success(result);
-           }
+            if (intent != null) {
+                final JSONObject result = prepareResult(intent, FeedbackResult.INTENT_FEEDBACK_RESULT_CAMPAIGN);
+                callbackContext.success(result);
+            }
         }
     };
+    private BroadcastReceiver receiverFormClosed = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                final JSONObject result = prepareResult(intent, FeedbackResult.INTENT_FEEDBACK_RESULT);
+                callbackContext.success(result);
+            }
 
-    private CallbackContext callbackContext;
+            final Activity activity = ((MainActivity) cordova.getActivity());
+            if (activity instanceof FragmentActivity) {
+                final FragmentManager supportFragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+                final Fragment fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG);
+
+                if (fragment != null) {
+                    supportFragmentManager.beginTransaction().remove(fragment).commit();
+                }
+            }
+        }
+    };
     private String appId;
     private String formId;
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(cordova.getActivity()).unregisterReceiver(receiverCampaignClosed);
+        LocalBroadcastManager.getInstance(cordova.getActivity()).unregisterReceiver(receiverFormClosed);
+    }
 
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
@@ -124,9 +154,39 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
         }
     }
 
+    @Override
+    public void formLoadSuccess(FormClient form) {
+        passiveFormFragment = form.getFragment();
+        final Activity activity = ((MainActivity) cordova.getActivity());
+        if (activity instanceof FragmentActivity && form != null) {
+            ((FragmentActivity) activity).getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(android.R.id.content, passiveFormFragment, FRAGMENT_TAG)
+                    .commit();
+            passiveFormFragment = null;
+        }
+    }
+
+    @Override
+    public void formLoadFail() {
+        final JSONObject result =  new JSONObject();
+        try {
+            result.put(KEY_ERROR_MSG, "The form could not be loaded");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        callbackContext.error(result);
+    }
+
+    @Override
+    public void mainButtonTextUpdated(String text) {
+        // To fill with handling required when the main button text changes
+    }
+
     private void initialize(HashMap<String, Object> customVars, String appId) {
         Usabilla.INSTANCE.initialize(cordova.getActivity(), appId, null, this);
         Usabilla.INSTANCE.setCustomVariables(customVars);
+        LocalBroadcastManager.getInstance(cordova.getActivity()).registerReceiver(receiverFormClosed, closeFormFilter);
         LocalBroadcastManager.getInstance(cordova.getActivity()).registerReceiver(receiverCampaignClosed, closeCampaignFilter);
     }
 
@@ -137,22 +197,12 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
     }
 
     private void loadForm(JSONObject data, boolean withScreenshot) throws JSONException {
-        final Intent intent = new Intent(cordova.getActivity(), UsabillaActivity.class);
         parseOptions(data);
-        if (formId != null) {
-            intent.putExtra(FORM_ID, formId);
-        }
+        Bitmap screenshot = null;
         if (withScreenshot) {
-            final Bitmap screenshot = Usabilla.INSTANCE.takeScreenshot(cordova.getActivity());
-            if (screenshot != null) {
-                try (FileOutputStream out = cordova.getContext().openFileOutput(SCREENSHOT_NAME, Context.MODE_PRIVATE)) {
-                    screenshot.compress(Bitmap.CompressFormat.PNG, 100, out);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            screenshot = Usabilla.INSTANCE.takeScreenshot(cordova.getActivity());
         }
-        cordova.startActivityForResult(this, intent, 0);
+        Usabilla.INSTANCE.loadFeedbackForm(formId, screenshot, null, this);
     }
 
     private void resetCampaignData() {
@@ -174,7 +224,7 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
                 } else if ((APP_ID).equals(key)) {
                     appId = (String) value;
                 } else if ((CUSTOM_VARS).equals(key)) {
-                    Log.d("CUSTOM_VARS",value.toString());
+                    Log.d("CUSTOM_VARS", value.toString());
                 } else {
                     customVars.put(key, value.toString());
                 }
