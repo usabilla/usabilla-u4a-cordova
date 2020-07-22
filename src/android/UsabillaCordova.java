@@ -34,6 +34,8 @@ import java.util.List;
 
 public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallback, UsabillaFormCallback {
 
+    private static final String FORM_IDs = "FORM_IDs";
+    private static final String DEBUG_ENABLED = "DEBUG_ENABLED";
     public static final String FRAGMENT_TAG = "passive form";
     private static final String APP_ID = "APP_ID";
     private static final String EVENT_NAME = "EVENT_NAME";
@@ -79,6 +81,7 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
     };
     private String appId;
     private String formId;
+    private Usabilla usabilla = Usabilla.INSTANCE;
 
     @Override
     public void onDestroy() {
@@ -116,6 +119,17 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
                 return true;
             case "getDefaultDataMasks":
                 getDefaultDataMasks();
+                return true;
+            case "preloadFeedbackForms":
+                final JSONObject formObj = (JSONObject) data.get(0);
+                preloadFeedbackForms((JSONArray) formObj.getJSONArray(FORM_IDs));
+                return true;
+            case "removeCachedForms":
+                removeCachedForms();
+                return true;
+            case "setDebugEnabled":
+                final JSONObject debugObj = (JSONObject) data.get(0);
+                setDebugEnabled((Boolean) debugObj.get(DEBUG_ENABLED));
                 return true;
             default:
                 return false;
@@ -184,15 +198,15 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
     }
 
     private void initialize(HashMap<String, Object> customVars, String appId) {
-        Usabilla.INSTANCE.initialize(cordova.getActivity(), appId, null, this);
-        Usabilla.INSTANCE.setCustomVariables(customVars);
+        usabilla.initialize(cordova.getActivity(), appId, null, this);
+        usabilla.setCustomVariables(customVars);
         LocalBroadcastManager.getInstance(cordova.getActivity()).registerReceiver(receiverFormClosed, closeFormFilter);
         LocalBroadcastManager.getInstance(cordova.getActivity()).registerReceiver(receiverCampaignClosed, closeCampaignFilter);
     }
 
     @Override
     public void onUsabillaInitialized() {
-        Usabilla.INSTANCE.updateFragmentManager(((FragmentActivity) cordova.getActivity()).getSupportFragmentManager());
+        usabilla.updateFragmentManager(((FragmentActivity) cordova.getActivity()).getSupportFragmentManager());
         UsabillaCordova.this.onActivityResult(0, Activity.RESULT_OK, null);
     }
 
@@ -200,17 +214,17 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
         parseOptions(data);
         Bitmap screenshot = null;
         if (withScreenshot) {
-            screenshot = Usabilla.INSTANCE.takeScreenshot(cordova.getActivity());
+            screenshot = usabilla.takeScreenshot(cordova.getActivity());
         }
-        Usabilla.INSTANCE.loadFeedbackForm(formId, screenshot, null, this);
+        usabilla.loadFeedbackForm(formId, screenshot, null, this);
     }
 
     private void resetCampaignData() {
-        Usabilla.INSTANCE.resetCampaignData(cordova.getActivity(), this);
+        usabilla.resetCampaignData(cordova.getActivity(), this);
     }
 
     private void sendEvent(String eventName) {
-        Usabilla.INSTANCE.sendEvent(cordova.getActivity(), eventName);
+        usabilla.sendEvent(cordova.getActivity(), eventName);
     }
 
     private HashMap<String, Object> parseOptions(JSONObject dataObj) throws JSONException {
@@ -234,11 +248,30 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
     }
 
     private void dismiss() {
-        if (Usabilla.INSTANCE.dismiss(cordova.getActivity())) {
+        if (usabilla.dismiss(cordova.getActivity())) {
             callbackContext.success();
             return;
         }
         callbackContext.error("No forms to dismiss");
+    }
+
+    private void preloadFeedbackForms(JSONArray formIDs) throws JSONException {
+        List<String> formIdLists = new ArrayList<>();
+        for (int i = 0; i < formIDs.length(); i++) {
+            formIdLists.add(formIDs.getString(i));
+        }
+        usabilla.preloadFeedbackForms(formIdLists);
+        callbackContext.success();
+    }
+
+    private void removeCachedForms() {
+        usabilla.removeCachedForms();
+        callbackContext.success();
+    }
+
+    private void setDebugEnabled(Boolean debugEnabled) {
+        usabilla.setDebugEnabled(debugEnabled);
+        callbackContext.success();
     }
 
     private void setDataMasking(JSONObject data) throws JSONException {
@@ -250,7 +283,7 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
             maskList.add(masks.getString(i));
         }
 
-        Usabilla.INSTANCE.setDataMasking(maskList, maskCharacter.charAt(0));
+        usabilla.setDataMasking(maskList, maskCharacter.charAt(0));
     }
 
     private void getDefaultDataMasks() {
