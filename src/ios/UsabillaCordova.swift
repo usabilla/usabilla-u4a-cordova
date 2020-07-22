@@ -14,6 +14,9 @@ class UsabillaCordova: CDVPlugin {
     var eventName: String?
     var masks: [String]?
     var maskChar: String?
+    var formIds: [String]?
+    var debugEnabled: Bool?
+    var localizedStringFile: String?
 
     // Extracts the variables sent from Usabilla.js
     func extractCustomVariables(command: CDVInvokedUrlCommand) {
@@ -32,6 +35,12 @@ class UsabillaCordova: CDVPlugin {
                     self.maskChar = value as? String
                 } else if (key == "CUSTOM_VARS") {
                     self.customVariables = value as? [String : Any]
+                } else if (key == "FORM_IDs") {
+                    self.formIds = value as? [String]
+                } else if (key == "DEBUG_ENABLED") {
+                    self.debugEnabled = value as? Bool
+                } else if (key == "LOCALIZED_STRING_FILENAME") {
+                    self.localizedStringFile = value as? String
                 } else {
                     debugPrint(key, value, separator: " -- ")
                 }
@@ -120,6 +129,41 @@ class UsabillaCordova: CDVPlugin {
         } else {
             Usabilla.setDataMasking(masks: Usabilla.defaultDataMasks, maskCharacter: "X")
         }
+        self.success(completed: true)
+    }
+    
+    // preloadFeedbackForms
+    @objc(preloadFeedbackForms:)
+    func preloadFeedbackForms(_ command: CDVInvokedUrlCommand) {
+        self.command = command;
+        extractCustomVariables(command: command)
+        Usabilla.preloadFeedbackForms(withFormIDs: self.formIds!)
+        self.success(completed: true)
+    }
+    
+    // removeCachedForms
+    @objc(removeCachedForms:)
+    func removeCachedForms(_ command: CDVInvokedUrlCommand) {
+        self.command = command;
+        let _ = Usabilla.removeCachedForms()
+        self.success(completed: true)
+    }
+    
+    // setDebugEnabled
+    @objc(setDebugEnabled:)
+    func setDebugEnabled(_ command: CDVInvokedUrlCommand) {
+        self.command = command;
+        extractCustomVariables(command: command)
+        Usabilla.debugEnabled = self.debugEnabled!
+        self.success(completed: true)
+    }
+    
+    // loadLocalizedStringFile
+    @objc(loadLocalizedStringFile:)
+    func loadLocalizedStringFile(_ command: CDVInvokedUrlCommand) {
+        self.command = command;
+        extractCustomVariables(command: command)
+        Usabilla.localizedStringFile = self.localizedStringFile!
         self.success(completed: true)
     }
     
