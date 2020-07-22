@@ -135,10 +135,11 @@ class UsabillaCordova: CDVPlugin {
         )
     }
     
-    func error() {
+    func error(error: Any) {
+        let result = ["error": error] as [AnyHashable : Any]
         let pluginResult = CDVPluginResult(
             status: CDVCommandStatus_ERROR,
-            messageAs: "Unexpected error"
+            messageAs: result
         )
         self.commandDelegate!.send(
             pluginResult,
@@ -148,7 +149,7 @@ class UsabillaCordova: CDVPlugin {
 }
 
 extension UsabillaCordova: UsabillaDelegate {
-      func formDidLoad(form: UINavigationController) {
+    func formDidLoad(form: UINavigationController) {
         formNavigationController = form
         if let rootVC = UIApplication.shared.keyWindow?.rootViewController {
             rootVC.present(formNavigationController!, animated: true, completion: nil)
@@ -157,7 +158,7 @@ extension UsabillaCordova: UsabillaDelegate {
 
     func formDidFailLoading(error: UBError) {
         formNavigationController = nil
-        self.error()
+        self.error(error: "The form could not be loaded")
     }
 
     func formDidClose(formID: String, withFeedbackResults results: [FeedbackResult], isRedirectToAppStoreEnabled: Bool) {

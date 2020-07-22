@@ -41,7 +41,8 @@
     <dependency id="cordova-plugin-add-swift-support" version="2.0.2">
       <preference name="UseSwiftLanguageVersion" value="4.0" />
     </dependency>
+     <pods-config ios-min-version="9.0" use-frameworks="true"/>
     <source-file src="src/ios/UsabillaCordova.swift" />
-    <framework src="Usabilla" type="podspec" spec="~>6.7" />
+    <pod name="Usabilla" spec="~>6.4.7"/>
   </platform>
 </plugin>
