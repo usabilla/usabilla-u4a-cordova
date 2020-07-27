@@ -37,24 +37,27 @@
     </head>
     <body>
         <div class="app">
-            <h1>Usabilla SDK</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
-            <div class="formDetails event received">
-                <input id="form-id" type="text" value="{YOUR_FORM_ID_HERE}" placeholder="Form Id">
-                <button id="feedback-button" type="button">Send Feedback</button>
-                <br />
-                <br />
-                <input id="event-id" type="text" value="{YOUR_EVENT_NAME}" placeholder="Event Name">
-                <button id="event-button" type="button">Send Event</button>
-                <br />
-                <br />
-                <button id="reset-button" type="button">Reset Event</button>
+            <div class="ub-title">Usabilla Cordova Demo App</div>
+            <div class="ub-group">
+                <div class="show-form">
+                    <button class="btn" id="feedback-button" type="button">SHOW FORM</button>
+                </div>
+                <div class="event-group">
+                    <div class="show-event">
+                            <input class="event-input" id="event-id" type="text" placeholder="Enter Event here">
+                            <button class="btn" id="event-button" type="button">Send Event</button>
+                    </div>
+                    <div class="reset-event">
+                        <button class="btn" id="reset-button" type="button">Reset Event</button>
+                    </div>
+                </div>
             </div>
         </div>
+        <div class="footer">
+            <img src="img/footer.png" >
+        </div>
         <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/config.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>
