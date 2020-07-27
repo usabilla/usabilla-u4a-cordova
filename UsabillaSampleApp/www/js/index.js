@@ -23,7 +23,6 @@ var app = {
         this.initForm();
         this.initEvent();
         this.initResetCampaign();
-        this.receivedEvent('deviceready');
     },
 
     // deviceready Event Handler
@@ -31,59 +30,34 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
-        this.receivedEvent('deviceready');
         this.initApp();
     },
-
-    setButtonsDisabled: function(disabled) {
-        Array.prototype.forEach.call (document.querySelectorAll('button'), function (item) {
-            item.disabled = disabled;
-        } );
-    },
-
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-    },
-
     initApp: function() {
-        this.setButtonsDisabled(true);
         var self = this;
-        var appId = "{YOUR_APP_ID_HERE}";
-        var customVars = {
-            type: 'premium'
-        };
         Usabilla.initialize(
-            function() {
-                self.setButtonsDisabled(false);
-            },
-            function () {
-                self.setButtonsDisabled(false);
+            function(res) {
+                console.log('Init - ',JSON.stringify(res));
+            }, 
+            function (err) {
+                console.log('Init - ',JSON.stringify(err));
             },
             appId,
-            customVars
-        )
+            customVariable
+        );
     },
     initForm: function() {
         var self = this;
         var sendFeedback = document.getElementById("feedback-button");
         sendFeedback.onclick = function() {
-            self.setButtonsDisabled(true);
-            var formId = document.getElementById("form-id").value;
             if (!formId) {
                 alert("Input a form id to submit");
             } else {
                 Usabilla.loadFeedbackForm(
-                    function() {
-                        self.setButtonsDisabled(false);
+                    function(res) {
+                        console.log('Form - '+JSON.stringify(res));
                     }, 
-                    function () {
-                        self.setButtonsDisabled(false);
+                    function (err) {
+                        console.log('Form - '+JSON.stringify(err));
                     },
                     formId);
             }
@@ -93,14 +67,13 @@ var app = {
         var self = this;
         var resetEvent = document.getElementById("reset-button");
         resetEvent.onclick = function() {
-            self.setButtonsDisabled(true);
             Usabilla.resetCampaignData(
-                function() {
-                    self.setButtonsDisabled(false);
+                function(res) {
+                    console.log('Reset - '+JSON.stringify(res));
+                }, 
+                function (err) {
+                    console.log('Reset - '+JSON.stringify(err));
                 },
-                function() {
-                    self.setButtonsDisabled(false);
-                }
             );
         };
     },
@@ -109,18 +82,20 @@ var app = {
         var sendEvent = document.getElementById("event-button");
         sendEvent.onclick = function() {
             var eventId = document.getElementById("event-id").value;
-            self.setButtonsDisabled(true);
-            if (!eventId) {
+            if (eventId !== "") {
+                event = eventId;
+            }
+            if (!event) {
                 alert("Input an event id to submit");
             } else {
                 Usabilla.sendEvent(
-                    function() {
-                        self.setButtonsDisabled(false);
+                    function(res) {
+                        console.log('Event - '+JSON.stringify(res));
                     }, 
-                    function () {
-                        self.setButtonsDisabled(false);
+                    function (err) {
+                        console.log('Event - '+JSON.stringify(err));
                     },
-                    eventId);
+                    event);
             }
         }
     }

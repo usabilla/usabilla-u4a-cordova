@@ -16,106 +16,140 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-* {
-    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
-}
 
-body {
-    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
-    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
-    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#E4E4E4;
-    background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, #A7A7A7),
-        color-stop(0.51, #E4E4E4)
-    );
-    background-attachment:fixed;
-    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
-    font-size:12px;
-    height:100%;
-    margin:0px;
-    padding:0px;
-    text-transform:uppercase;
-    width:100%;
-}
+ @font-face {
+    font-family: 'MiloOT';
+    src: url('../fonts/MiloOT-Text.otf');
+  }
 
-/* Portrait layout (default) */
-.app {
-    position:absolute;             /* position in the center of the screen */
-    top:30px;
-    height:50px;                   /* text area height */
-    width:100%;                   /* text area width */
-    text-align:center;
-    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
-}
+  @font-face {
+    font-family: 'MiloOT-Bold';
+    src: url('../fonts/MiloOT-Bold.otf');
+  }
 
-/* Landscape layout (with min-width) */
-@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
-    .app {
-        background-position:left center;
-        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
-        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
-                                      /* offset horizontal: half of image width and text area width */
-    }
-}
+  @font-face {
+    font-family: 'MiloOT-Medi';
+    src: url('../fonts/MiloOT-Medi.otf');
+  }
 
-h1 {
-    font-size:24px;
-    font-weight:normal;
-    margin:0px;
-    overflow:visible;
-    padding:0px;
-    text-align:center;
-}
+ body {
+    background-image: url('../img/background.png');
+    background-size: 100%;
+  }
+  
+  /* Can be used to apply style over whole page div
+  .app {
+      //text-align:center;
+  }
+   */
+  .ub-title {
+      height: 192px;
+      width: 272px;
+      color: #00A5C9;
+      font-family: "MiloOT-Bold";
+      font-size: 55px;
+      font-weight: bold;
+      letter-spacing: 0;
+      margin-left: 30px;
+      margin-top: 30px;
+      line-height: 65px;
+  }
+  
+  .ub-group {
+      text-align:center;
+      margin-top: 50%;
+      -webkit-transform: translateY(-50%);
+      -moz-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      -o-transform: translateY(-50%);
+      transform: translateY(-50%);
+  }
 
-.event {
-    border-radius:4px;
-    -webkit-border-radius:4px;
-    color:#FFFFFF;
-    font-size:12px;
-    margin: 10px auto;
-    padding:2px 0px;
-    max-width: 200px;
-}
+  /* Can be used to apply style over form div
+  .show-form {
+      // text-align: center;
+  }
+  */
+  .show-form .btn{
+      color: #FFFFFF;
+      font-family: "MiloOT-Medi";
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: 0;
+      line-height: 19px;
+      border-radius: 2px;
+      background-color: #00A5C9;
+      width: 334px;
+      height: 48px;
+  }
 
-.event.listening {
-    background-color:#333333;
-    display:block;
-}
-
-.event.received {
-    background-color:#4B946A;
-    display:none;
-}
-
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
- 
-@-webkit-keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
- 
-.blink {
-    animation:fade 3000ms infinite;
-    -webkit-animation:fade 3000ms infinite;
-}
-
-.event.received.formDetails {
-    padding: 20px 20px;
-    display: inline-block !important;
-    max-width: 600px;
-    background-color: transparent;
-}
-
-
+  /* Can be used to apply style over event div
+  .event-group {
+      // text-align: center; 
+  }
+  */
+  
+  .show-event {
+      padding-top: 40px;
+  }
+  .show-event .event-input{
+      color: #A6B5C3;
+      font-family: "MiloOT";
+      font-size: 19px;
+      letter-spacing: 0;
+      line-height: 19px;
+      box-sizing: border-box;
+      height: 48px;
+      width: 186px;
+      padding-left: 16px;
+      margin-right: 16px;
+      border: 1px solid #C8D2DA;
+      border-radius: 2px;
+      background-color: #FFFFFF;
+  }
+  .show-event .btn{
+      color: #00A5C9;
+      font-family: "MiloOT-Medi";
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-align: center;
+      box-sizing: border-box;
+      height: 48px;
+      width: 130px;
+      border: 1px solid #00A5C9;
+      border-radius: 2px;
+      background-color: #FFFFFF;
+  }
+  
+  .reset-event {
+      padding-top: 16px;
+  }
+  .reset-event .btn{
+      color: #00A5C9;
+      font-family: "MiloOT-Medi";
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: 0;
+      line-height: 19px;
+      text-align: center;
+      box-sizing: border-box;
+      height: 48px;
+      width: 334px;
+      border: 1px solid #00A5C9;
+      border-radius: 2px;
+      background-color: #FFFFFF;
+  }
+  
+  .footer {
+      position: fixed;
+      bottom: 0;
+      margin-bottom: 40px;
+      width: 100%;
+      text-align: center;
+  }
+  
+  .footer img {
+   height: 50px;
+   width: 83px;
+  }
