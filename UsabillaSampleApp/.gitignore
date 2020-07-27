@@ -11,3 +11,5 @@ plugins/
 
 # res
 resources/signing
+resources/android/
+resources/ios/
