@@ -43,6 +43,6 @@
     </dependency>
      <pods-config ios-min-version="9.0" use-frameworks="true"/>
     <source-file src="src/ios/UsabillaCordova.swift" />
-    <pod name="Usabilla" spec="~>6.4.7"/>
+    <pod name="Usabilla" spec="~>6.5"/>
   </platform>
 </plugin>
