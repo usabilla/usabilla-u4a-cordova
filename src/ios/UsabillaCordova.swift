@@ -10,7 +10,7 @@ class UsabillaCordova: CDVPlugin {
     var command: CDVInvokedUrlCommand?
     var formId: String?
     var appId: String?
-    var customVariables: [String: Any]?
+    var customVariables: [String: String]?
     var eventName: String?
     var masks: [String]?
     var maskChar: String?
@@ -34,7 +34,7 @@ class UsabillaCordova: CDVPlugin {
                 } else if (key == "MASK_CHAR") {
                     self.maskChar = value as? String
                 } else if (key == "CUSTOM_VARS") {
-                    self.customVariables = value as? [String : Any]
+                    self.customVariables = value as? [String : String]
                 } else if (key == "FORM_IDs") {
                     self.formIds = value as? [String]
                 } else if (key == "DEBUG_ENABLED") {
@@ -58,7 +58,11 @@ class UsabillaCordova: CDVPlugin {
             completion: {
                 self.success(completed: true)
         })
-        Usabilla.customVariables = self.customVariables!.mapValues { String(describing: $0) }
+        guard let variable = self.customVariables else {
+            print("ERROR : Expected customVariables as Dictionary of String [String : String]")
+            return
+        }
+        Usabilla.customVariables = variable
     }
 
     // Load Usabilla passive forms with form ids

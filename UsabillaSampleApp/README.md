@@ -66,6 +66,7 @@ const formId = 'YOUR_FORM_ID_HERE';
 let event = 'YOUR_EVENT_TAG_HERE';
 const customVariable = {'YOUR_KEY_HERE': 'YOUR_VALUE_HERE'};
 ```
+**NOTE**: `customVariable` should be a valid JSON object with the limitations as the key,value should be of String type.
 
 ### Functions
 
@@ -73,6 +74,7 @@ const customVariable = {'YOUR_KEY_HERE': 'YOUR_VALUE_HERE'};
 ```
 initialize → String appId , Object customVariable
 ```
+**NOTE**: `customVariable` should be a valid JSON object with the limitations as the key,value should be of String type.
 ``` js
     const customVariable = {'YOUR_KEY_HERE': 'YOUR_VALUE_HERE'};
     Usabilla.initialize(function() {}, function (err) {}, appId, customVariable);

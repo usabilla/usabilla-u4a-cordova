@@ -55,6 +55,7 @@ Prior to any usage the tool needs to be started:
     YOUR_APP_ID_HERE,
     customVars}
 ```
+**NOTE**: `customVars` should be a valid JSON object with the limitations as the key,value should be of String type.
 
 ### Load a Passive Feedback form
 
