@@ -240,7 +240,7 @@ public class UsabillaCordova extends CordovaPlugin implements UsabillaReadyCallb
                 } else if ((CUSTOM_VARS).equals(key)) {
                     Log.d("CUSTOM_VARS", value.toString());
                 } else {
-                    customVars.put(key, value.toString());
+                    customVars.put(key, value);
                 }
             }
         }
