@@ -18,6 +18,7 @@
     "q": "^1.4.1"
   },
   "scripts": {
+    "postinstall": "if [ -d \".git/hooks/\" ]; then cp .script/commit_check.sh .git/hooks/commit-msg; fi",
     "semantic-release": "semantic-release"
   },
   "keywords": [
