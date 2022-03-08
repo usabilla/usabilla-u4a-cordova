@@ -13,7 +13,8 @@ cdvCompileSdkVersion=28
 cdvMinSdkVersion=19
 
 dependencies {
-    compile 'com.usabilla.sdk:ubform:7.+'
+    /* TODO: Revert back ubform to semantic version for all minor & patches ~ 7.+ */
+    compile 'com.usabilla.sdk:ubform:7.4.0'
 }
 
 android {
